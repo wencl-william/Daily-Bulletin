@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> 
+
+    <link href='https://5il.co/n5mn' rel='stylesheet' />
+    <script type="text/javascript" src="https://5il.co/n5ml"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"> 
+    
+    <style>
+        .top-bar{
+            margin-bottom: 25px;
+        }
+        .divider-horizontal{
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+        .body-text{
+            font-size: 16px;
+        }
+        body{
+            padding-top: 16px;
+        }
+        h1, .h1{
+            color: #D04100; 
+        }
+        .h2, h2{
+            color: #D04100; 
+        }
+        h4, .h4{
+            font-family: Verdana, Geneva, sans-serif;
+            font-style: italic;
+            font-weight: normal;
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 16px;
+            color: inherit;
+        }
+        .bDay{
+            /* background-color: #103311; */
+            width: 23.7%;
+        }
+        .staffOut{
+            /* background-color: aqua; */
+            width: 40.5%;
+        }
+        .cal-container{
+            /* background-color: blueviolet; */
+            width: 31.7%;
+        }
+        .spacer{
+            width: 2.0%;
+            display: flex;
+            align-content: center;
+        }
+        .divider-vertical{
+            width:1.5px;
+            background-color: #ececec;
+            height: 90%;
+            margin: auto;
+        }  
+        .ui-widget.ui-widget-content {
+            border: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.31) !important;
+        }
+        .ui-widget-header {
+            background: none;
+            border: none;
+            color: #d04100;
+            font-weight: normal;
+        }
+        table span {
+            color: #d04100;
+        }
+        tbody td a {
+            background: none !important;
+            text-align: center !important;
+            border: none !important;
+            height: 19px !important;
+            width: 19px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            border-radius: 999px !important;
+            font-size: 14px !important;
+        }
+        tbody td a:hover {
+            background: rgba(157, 160, 164, 0.3) !important;
+        }
+        .ui-datepicker-today a {
+            border: 1px solid #d01400 !important;
+        }
+
+        .ui-icon.ui-icon-circle-triangle-w, .ui-icon.ui-icon-circle-triangle-e{
+            display: none !important;
+        }
+        .ui-datepicker-next.ui-corner-all {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='26px' height='26px' viewBox='-5 -1 16 34' class='vc-svg-icon'><path fill='%23718096' d='M10.625 17.429c0 0.143-0.071 0.304-0.179 0.411l-8.321 8.321c-0.107 0.107-0.268 0.179-0.411 0.179s-0.304-0.071-0.411-0.179l-0.893-0.893c-0.107-0.107-0.179-0.25-0.179-0.411 0-0.143 0.071-0.304 0.179-0.411l7.018-7.018-7.018-7.018c-0.107-0.107-0.179-0.268-0.179-0.411s0.071-0.304 0.179-0.411l0.893-0.893c0.107-0.107 0.268-0.179 0.411-0.179s0.304 0.071 0.411 0.179l8.321 8.321c0.107 0.107 0.179 0.268 0.179 0.411z'></path></svg>");
+            background-position: center;
+        }
+        .ui-datepicker-prev.ui-corner-all{
+            background-image: url("data:image/svg+xml;utf8, <svg xmlns='http://www.w3.org/2000/svg' width='26px' height='26px' viewBox='0 -1 16 34' class='vc-svg-icon'><path fill='%23718096' d='M11.196 10c0 0.143-0.071 0.304-0.179 0.411l-7.018 7.018 7.018 7.018c0.107 0.107 0.179 0.268 0.179 0.411s-0.071 0.304-0.179 0.411l-0.893 0.893c-0.107 0.107-0.268 0.179-0.411 0.179s-0.304-0.071-0.411-0.179l-8.321-8.321c-0.107-0.107-0.179-0.268-0.179-0.411s0.071-0.304 0.179-0.411l8.321-8.321c0.107-0.107 0.268-0.179 0.411-0.179s0.304 0.071 0.411 0.179l0.893 0.893c0.107 0.107 0.179 0.25 0.179 0.411z'></path></svg>");
+            background-position: center;
+        }
+        .ui-datepicker-next.ui-corner-all:hover {
+            background-color: #edf2f7;
+            border: 0px;
+            right: 2px;
+            top: 2px;
+        }
+        .ui-datepicker-prev.ui-corner-all:hover {
+            background-color: #edf2f7;
+            border: 0px;
+            left: 2px;
+            top: 2px;
+        }
+        .datepicker{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 16px;
+            width: 143px;
+            padding-left: 13px;
+            border-radius: 10px;
+            border: 1px solid #ececec;
+            color: #333;
+            height: 43px;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        a{
+            color: #D04100;
+            text-decoration: none;
+        }
+
+        @media (max-width:854px){
+            .datepicker-container{
+                order:2;
+            }
+            .top-bar h1{
+                order: 1;
+                width: 100%;
+            }
+            .top-bar .button-panel{
+                order: 3;
+            }
+            .button-panel.mod{
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width:600px){
+            .top-bar h1{
+                order: 2;
+            }
+            .datepicker-container{
+                order:3;
+            }
+            .top-bar .button-panel{
+                order: 1;
+            }
+            .top-bar{
+                justify-content: center !important;
+            }
+        }
+        .divider-horizontal.bDayDivider{
+            display: none;
+        }
+
+        @media (max-width:810px){
+            .bDay{
+                width: 100%;
+            }
+            #bDayText{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-evenly;
+            }
+            #bDayText p{
+                padding: 5px;
+                margin: 0px;
+                width: 185px;
+            }
+            .flex-item.spacer.bDayDivider{
+                display: none;
+            }
+            .divider-horizontal.bDayDivider{
+                display: initial;
+            }
+            .cal-container, .staffOut {
+                width: 48%;
+            } 
+        }
+
+        .divider-horizontal.eventsDivider{
+            display: none;
+        }
+        
+        @media (max-width:710px){
+            .cal-container{
+                width: 100%;
+                order: 5;
+            }  
+            .staffOut {
+                width: 100%;
+            } 
+            .flex-item.spacer.staffOutDivider{
+                display: none;
+            }
+            .divider-horizontal.eventsDivider{
+                display: initial;
+            }
+            #staffOutText{
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #announcementH1{
+                text-align: center !important;
+            }
+        }
+
+        .button-panel.mod{
+            margin-left: auto;
+            max-width: fit-content;
+            display: inherit !important;
+        }
+        .refresh:hover{
+            background-color: #ececec;
+            border-radius: 50px;
+        }
+        
+    
+        .button-panel{
+            border: none;
+            box-shadow: 0 0 6px #fff !important;
+            border-radius: 010px;
+            text-align: center;
+            vertical-align: middle;
+            display: table-cell;
+            height: auto;
+            
+            
+            font-size: 15px;
+            font-style: normal;
+            font-weight: bold;
+            color: #d04100;
+            padding: 12px;
+            padding-bottom: 7px;
+            padding-top: 7px;
+            background-color: #ececec;;
+            margin: 0px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            font-family: Verdana, Geneva, sans-serif;
+        }
+
+        .button-panel .glyphicon{
+            font-size: 15px;
+            font-weight: bold;
+            color: #D04100 !important;
+            vertical-align: middle !important;
+        }
+
+        .button-panel:hover{
+            box-shadow: 0 0 6px #d04100 !important;
+        }
+        .button-panel:hover a, .button-panel:hover .glyphicon{
+            color: #D04100 !important;
+            text-decoration: none;
+        }
+    
+        .mobile{display: none; text-align: center; width: 100%;}
+        .fc-listYearFromToday-button{min-width: 57px;}
+        .fc-listWeekFromToday-button{min-width: 57px;}
+
+        .fc-dayGridMonth-button{min-width: 72px;}
+        .fc-timeGridWeek-button{min-width: 65px;}
+
+        @media (max-width: 1100px) {
+            .largeScreen{display: none !important;}
+            .mobile{display: block;}
+            .fc-direction-ltr .fc-list-table .fc-list-event-graphic{display: none}
+            .fc-list-event-time{display: none !important;}
+            .fc-list-event-title{display: none !important;}
+            .fc .fc-list-table td{border-top: 0px; border-bottom: 0px;}
+            .fc-list-event{
+                border: solid;
+                border-width: 1px;
+                border-color: #ddd;
+            }
+
+            .calPopup{
+                width:90%;
+                margin-left: 5%;
+            }
+        }
+        #calendar{
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .fc table{
+            font-size: 14px;
+        }
+        .eventContent{
+            padding: 8px 14px;
+            text-align: left !important;
+        }
+        .calPopup {
+            display: none;
+            position: absolute;
+            border: solid 1px #D04100;
+            box-shadow: 0px 0px 6px #D04100;
+            border-radius: 5px;
+            background: #f7f7f7;
+            z-index: 2;
+            padding: 6px;
+
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 14px;
+
+            max-width: 400px;
+            min-width: 290px;
+        }
+        .calPopupClose{
+            float: right;
+            border: none;
+            background-color: inherit;
+            font-size: 16px;
+        }
+        .h5, h5{
+            font-family: Verdana, Geneva, sans-serif; 
+            font-style: italic;
+            font-size: 18px; 
+            color: #D04100; 
+            font-weight: normal;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        .fc .fc-list-event-dot{
+            border: 4px solid #D04100;
+        }
+        .fc-direction-ltr .fc-list-table .fc-list-event-graphic{
+            padding-right: 0px;
+        }
+        .fc .fc-list-table td{
+            padding-right: 10px;
+            padding-left: 8px;  
+        }
+    
+        .loader {
+            margin: auto;
+            border: 4.5px solid #D5450280;
+            border-radius: 50%;
+            border-top: 4.5px solid #D54502;
+            width: 45px;
+            height: 45px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+        }
+        #loader-container{
+            width: 100%;
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
+        
+        /* Safari */
+        @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+        }
+        
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <style id="printImport">
+         .h2, h2{
+            font-family: Verdana, Geneva, sans-serif; 
+            font-size: 24px;
+            text-align: center;
+            font-weight: normal;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+        #announcementH1{
+            text-align: left;
+        }
+        .announcements{
+            width:100%
+        }
+        .body-text{
+            font-family: 'Roboto', Arial, sans-serif;
+            white-space: pre-wrap;
+            padding: 5px;
+        }
+        .divider-horizontal{
+            margin-left: auto;
+            margin-right: auto;
+            
+
+            height:1.5px;
+            background-color: #ececec;
+            width: 90%;
+        } 
+        .top-bar{
+            column-gap: 30px;
+            justify-content: space-between;
+            row-gap: 20px;
+        }
+        .flex-container{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1280px; /*remove in final*/
+            margin-left: auto; /*remove in final*/
+            margin-right: auto; /*remove in final*/
+        }
+        .datepicker-container{
+            margin-top: auto;
+            margin-bottom: auto;
+            display: flex;
+        }
+        h1, .h1{
+            font-family: Verdana, Geneva, sans-serif; 
+            font-size: 36px; 
+            font-weight: bold;
+            font-style: italic;
+            text-align: center;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <? if (IsMod) { ?>
+        <h4 class="button-panel mod">
+            <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://docs.google.com/spreadsheets/d/1ITgzDy-8jQq2Ss_P0UEWisbmvRJ7NL0oBoKv1p_Fdvs/edit">
+                Edit Spreadsheet Data 
+                <svg style="margin-top: auto; margin-bottom: auto; margin-left: 8px" ;="" width="22" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden"><defs><clipPath id="clip0"><path d="M427 250 446 250 446 267 427 267Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip1"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip2"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip3"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip4"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip5"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs><g clip-path="url(#clip0)" transform="translate(-427 -250)"><g clip-path="url(#clip1)"><g clip-path="url(#clip2)"><g clip-path="url(#clip3)"><g clip-path="url(#clip4)"><g clip-path="url(#clip5)"><path d="M4.43998 5.70856 4.43998 3.80571 0.634285 7.61141C0.586713 7.61141 4.43998 11.417 4.43998 11.417L4.43998 9.51428 14.5885 7.61141 4.43998 5.70856Z" fill="#D04100" transform="matrix(-0.721125 0.693353 -0.69309 -0.720851 450.273 255.767)"></path></g></g></g><path d="M42.0677 26.2176 42.0677 39.2952" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 26.2176 51.2062 26.2176" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 38.809 55.0465 38.809" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M0 0-0.000101686-8.27331" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-1.01913 -0 -0 1 442.278 265.727)"></path><path d="M56.5514 39.5271 50.0123 39.5271" stroke="#D04100" stroke-width="0.603467" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path></g></g></g></svg>
+            </a>
+        </h4>
+    <? }?>
+    <div class="top-bar flex-container">
+        <div class="datepicker-container">
+            <input type="text" id="datepicker" class="datepicker">
+            <img src="https://5il.co/136s9" style="height: 20px;margin-left: -30px;margin-top: auto;margin-bottom: auto;">
+            <img src="https://5il.co/1dwzf" onclick="refreshBulletin()" class="refresh" style="height: 30px;margin-top: auto;margin-bottom: auto;margin-left: 13px; padding: 2px;">
+            <img src="https://5il.co/1e00j" onclick="print()" class="refresh" style="height: 30px;margin-top: auto;margin-bottom: auto; padding: 5px;">
+
+        </div>  
+
+        <h1>Daily Bulletin</h1>
+
+        <h4 class="button-panel">
+            <a role="button" href="https://forms.gle/tyy23VQSXj3j8f4Y8" target="_blank" style="display: flex;">
+                Add, Edit, or Remove <br> Announcements & Events
+                <svg style="margin-top: auto; margin-bottom: auto; margin-left: 8px"; width="22" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden"><defs><clipPath id="clip0"><path d="M427 250 446 250 446 267 427 267Z" fill-rule="evenodd" clip-rule="evenodd"/></clipPath><clipPath id="clip1"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"/></clipPath><clipPath id="clip2"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"/></clipPath><clipPath id="clip3"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"/></clipPath><clipPath id="clip4"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"/></clipPath><clipPath id="clip5"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"/></clipPath></defs><g clip-path="url(#clip0)" transform="translate(-427 -250)"><g clip-path="url(#clip1)"><g clip-path="url(#clip2)"><g clip-path="url(#clip3)"><g clip-path="url(#clip4)"><g clip-path="url(#clip5)"><path d="M4.43998 5.70856 4.43998 3.80571 0.634285 7.61141C0.586713 7.61141 4.43998 11.417 4.43998 11.417L4.43998 9.51428 14.5885 7.61141 4.43998 5.70856Z" fill="#D04100" transform="matrix(-0.721125 0.693353 -0.69309 -0.720851 450.273 255.767)"/></g></g></g><path d="M42.0677 26.2176 42.0677 39.2952" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"/><path d="M41.0991 26.2176 51.2062 26.2176" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"/><path d="M41.0991 38.809 55.0465 38.809" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"/><path d="M0 0-0.000101686-8.27331" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-1.01913 -0 -0 1 442.278 265.727)"/><path d="M56.5514 39.5271 50.0123 39.5271" stroke="#D04100" stroke-width="0.603467" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"/></g></g></g></svg>
+            </a>
+        </h4>
+    </div>
+
+    <div class="divider-horizontal" style="margin-top: 0px;"></div>
+    
+    <div class="flex-container" id="bulletinContainer">
+        <div id="bdayContainer" class="flex-item bDay">
+            <h2>Happy Birthday</h2>
+            <div id="bDayText" class="body-text"></div>
+        </div>
+        <div class="divider-horizontal bDayDivider"></div>
+        <div class="flex-item spacer bDayDivider">
+            <div class="divider-vertical"></div>
+        </div>
+        <div class="flex-item staffOut">
+            <h2>Staff Out of Building</h2>
+            <div id="staffOutText" class="body-text"></div>
+        </div>
+        <div class="flex-item spacer staffOutDivider">
+            <div class="divider-vertical"></div>
+        </div>
+        <div class="flex-item cal-container">
+            <h2>Upcoming Events</h2>
+            <div id='calendar'></div>
+        </div>
+        <div class="divider-horizontal"></div>
+
+        <div id="announcementCont" class="announcements">
+            <h2 id="announcementH1">Announcements</h2>
+            <div id="announcementText" class="body-text"></div>
+        </div>
+
+        <div class="divider-horizontal eventsDivider"></div>
+    </div>
+
+    <div id="loader-container">
+        <div class="loader"></div>
+    </div>
+    
+    
+
+    <div class="calPopup largeScreen" id="eventCalPopup" clicked="false">
+
+        <div class="calPopupTitle h5">
+            <button onclick="closePopup()" class="calPopupClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <span id="eventCalTitle"></span>
+        </div>
+
+        <div class="calPopupDate" id="eventCalDate"></div>
+    
+        <div class="calPopupLocation" id="eventCalLocation">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="calPopupDescription" id="eventCalDescription">
+            <i class="fas fa-align-justify"></i>
+           
+        </div>
+    </div>
+</body>
+
+
+
+<script>
+    var PAGES = {};
+
+    window.onresize = function(){ console.log(window.innerWidth)}
+
+
+    $(function() {
+        $("#datepicker").datepicker({
+            onSelect: function(dateText) {
+                // console.log("Selected date: " + dateText + ", Current Selected Value= " + this.value);
+                if(dateText[3] == "0"){
+                    this.value = dateText.slice(0,3)+dateText.slice(4);
+                }
+                if(dateText[0] == "0"){
+                    this.value = this.value.slice(1);
+                }
+                loadBulletin(this.value)
+            }
+        })
+    });
+
+    const sleep =  (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+    async function refreshBulletin(){
+        document.getElementById("bulletinContainer").style.display = "none";
+        document.getElementById("loader-container").style.display = "block";
+        await sleep(500);
+        loadBulletin(document.getElementById("datepicker").value);
+
+    }
+
+    function loadBulletin(dateStr){
+        document.getElementById("bulletinContainer").style.display = "none";
+        document.getElementById("loader-container").style.display = "block";
+
+        var onResponse = function(response){
+            PAGES[dateStr] = response;
+            document.getElementById("bDayText").innerHTML = response.birthday;
+            document.getElementById("staffOutText").innerHTML = response.staffOut;
+            document.getElementById("announcementText").innerHTML = response.announcement;
+            document.getElementById("bulletinContainer").style.display = "";
+            document.getElementById("loader-container").style.display = "none";
+        }
+
+        //else
+        console.log("Fetching page")
+        google.script.run.withSuccessHandler(onResponse).getJsonData(dateStr);
+        changeCalView(dateStr);
+    }
+
+    var calendar = null;
+            
+    function loadCalendar() {
+
+        var calToday = new Date();
+        calToday.setHours(0);
+        calToday.setMinutes(0);
+        var calOneWeek = new Date(calToday.getTime() + 5*24*60*60*1000);
+        
+
+        var calendarEl = document.getElementById('calendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+
+            googleCalendarApiKey: 'AIzaSyCKoP3lWp8luydNCwG4Ztk2FdSG56Ldl0s',
+            eventSources: [
+                {
+                    googleCalendarId: 'c_7ueu4b0leo6otmfp8rkam08b94@group.calendar.google.com'// 'cleveland@cleveland.k12.mn.us'
+                },
+                {
+                    //googleCalendarId: 'c_ip58rejhsf62bmhbl99isn8fdc@group.calendar.google.com',
+                    //className: 'nice-event'
+                }
+            ],
+            
+            headerToolbar: {
+                left: '',
+                center: '',
+                right: ''
+            },
+            
+
+            initialView: 'listWeekFromToday',
+
+            views: {
+                listWeekFromToday: {
+                    type: 'list',
+                    buttonText: 'Week',
+                    visibleRange: {start: calToday, end: calOneWeek},
+                    headerToolbar: {
+                        left: '',
+                        center: '',
+                        right: ''
+                    },
+                },
+            }, 
+            
+            viewDidMount: function(view,element) {
+                if(view.view.type == "listWeekFromToday"){
+                    //listWeekFromToday
+                    $('.fc-next-button,.fc-toolbar-title, .fc-prev-button, .fc-today-button').hide();
+                    // console.log("in");
+                }else{
+                                //listYear
+                    $('.fc-next-button,.fc-toolbar-title, .fc-prev-button, .fc-today-button').show();
+                    // console.log("notIn");
+            }},
+
+            height: 'auto',
+            stickyHeaderDates: false,
+            showNonCurrentDates: false,
+            fixedWeekCount: false,
+            slotMinTime: '07:00:00',
+            slotMaxTime: '22:30:00',
+            listDaySideFormat: false,
+            dayMaxEventRows: 5,
+            longPressDelay: 0,
+
+            listDayFormat: { weekday: 'long', month: 'long', year: 'numeric', day: 'numeric' },
+            dayPopoverFormat: { weekday: 'long', month: 'long', year: 'numeric', day: 'numeric' },
+        
+
+            eventClick: function (info) {
+                info.jsEvent.preventDefault(); // don't let the browser navigate
+                // console.log(info);
+                
+                var popup = document.getElementById('eventCalPopup');
+
+                updatePopup(info);
+
+                popup.setAttribute('clicked', 'false');
+                window.addEventListener('click', removePopupEvent);
+            },
+
+            eventMouseEnter: function (info) {
+                var popup = document.getElementById('eventCalPopup');
+                if (popup.getAttribute('clicked') == 'false') {
+                    updatePopup(info);
+                }
+            },
+            eventMouseLeave: function (info) {
+                var popup = document.getElementById('eventCalPopup');
+                if (popup.getAttribute('clicked') == 'false') {
+                    popup.style.display = 'none';
+                }
+            },
+            eventDidMount: function(info){
+                
+                var location = info.event.extendedProps.location;
+                var description = info.event.extendedProps.description;
+
+                if(location != undefined){
+                    location = '<i class="fas fa-map-marker-alt"></i> ' + location;
+                }else{
+                    location = '';
+                }
+
+                if(description != undefined){
+                    description= '<i class="fas fa-align-justify"></i> ' + description;
+                }else{
+                    description='';
+                }
+                info.el.innerHTML += '<div class="mobile eventContent"><div>' + timeFormat(info.event)   + 
+                    '<div></div>' + info.event.title + '<div></div>' + location + '<div></div>' + description + '</div>';
+                
+            },
+            
+        
+        });
+        calendar.render();
+        document.getElementsByClassName('fc-header-toolbar')[0].style.margin = 0;
+        document.getElementsByClassName('fc-header-toolbar')[0].style.height = '5px';
+    }
+
+    // $(window).on("load", loadCalendar);
+
+    function removePopupEvent(e) {
+        var popup = document.getElementById('eventCalPopup');
+                    
+        if (!popup.contains(e.target) && popup.getAttribute('clicked') == 'true') {
+            popup.style.display = 'none';
+            popup.setAttribute('clicked', 'false');
+            window.removeEventListener('click', removePopupEvent);
+        }
+        else {
+            popup.setAttribute('clicked', 'true');
+        }
+                
+    }
+
+    function closePopup(){
+        var popup = document.getElementById('eventCalPopup');
+        popup.setAttribute('clicked', 'false');
+        popup.style.display = 'none';
+        window.removeEventListener('click', removePopupEvent)
+    }
+
+    function updatePopup(info) {
+        var popup = document.getElementById('eventCalPopup');
+
+        var mouseX = info.jsEvent.pageX;
+        var mouseY = info.jsEvent.pageY;
+        if (mouseX == 0 && mouseY == 0) {
+            mouseX = window.innerWidth/2;//Change to center
+            mouseY = window.innerHeight/2 + window.pageYOffset;//Change to center
+        }
+        mouseX = keepOnScreen(mouseX);
+
+        popup.style.left = mouseX + 'px';
+        popup.style.top = mouseY + 'px';
+        popup.style.display = 'block';
+
+        var location = info.event.extendedProps.location;
+        var description = info.event.extendedProps.description;
+
+        if(location != undefined){
+            location = '<i class="fas fa-map-marker-alt"></i> ' + location;
+        }else{
+            location = '';
+        }
+
+        if(description != undefined){
+            description= '<i class="fas fa-align-justify"></i> ' + description;
+        }else{
+            description='';
+        }
+
+        document.getElementById("eventCalTitle").innerHTML = info.event.title;
+        document.getElementById("eventCalDate").innerHTML = dateLineFormat(info.event);
+        document.getElementById("eventCalLocation").innerHTML = location;
+        document.getElementById("eventCalDescription").innerHTML = description;
+
+    }
+
+    function keepOnScreen(xloc)
+    {
+        maxX = window.innerWidth - 410;
+        if(window.innerWidth < 600)
+        {
+            return 0;
+        }
+        else if(xloc > maxX) //window - the max width of the cal event plus a margin
+        {
+            return maxX;
+        }
+        else
+        {
+            return xloc;
+        }
+    }
+
+    function dateLineFormat(event) {
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const week =["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        if(event.allDay)
+        {
+            try
+            {
+                if(event.start.getMonth() != event.end.getMonth())
+                {            
+                    return months[event.start.getMonth()] + ' ' + event.start.getDate() + " – " + months[event.start.getMonth()] + ' ' + (event.end.getDate()-1);
+                }
+                else if (event.start.getDate() >= event.end.getDate()-1)
+                {
+                    return week[event.start.getDay()] + ', ' + months[event.start.getMonth()] + ' ' + event.start.getDate();
+                }
+                else
+                {
+                    return months[event.start.getMonth()] + ' ' + event.start.getDate() + " – " + (event.end.getDate()-1);
+                }
+            }
+            catch(e)
+            {
+                return week[event.start.getDay()] + ', ' + months[event.start.getMonth()]+ ' ' + event.start.getDate(); 
+            }
+        }
+        else 
+        {
+            var dateStr = week[event.start.getDay()] + ', ' +  months[event.start.getMonth()] +' '+ event.start.getDate() +" ⋅ ";
+            try
+            {
+                if(event.start.getDate() == event.end.getDate())
+                {
+                    var start = to12Hr(event.start)
+                    
+                    var end = to12Hr(event.end)
+
+                    if(start.amPm == end.amPm)
+                    {
+                        dateStr =dateStr + start.time + " – " + end.time + end.amPm;
+                    }
+                    else
+                    {
+                        dateStr =dateStr + start.time + start.amPm + " – " + end.time + end.amPm;
+                    }
+                }  
+
+            }
+            catch(e)
+            {
+                var start = to12Hr(event.start)
+                dateStr =dateStr + start.time + start.amPm;
+            }
+            return dateStr;
+        }
+    }
+
+    function to12Hr(date) {
+        var hr = date.getHours();
+        var min = date.getMinutes();
+        var amPm = "am";
+
+        if (hr > 12) {
+            hr = hr - 12;
+            amPm = 'pm';
+        }
+        else if(hr == 0) {
+            hr = 12;
+        }
+        else if(hr == 12) {
+            amPm = 'pm';
+        }
+        
+
+        return {time: hr+':'+ pad2(min), amPm: amPm}
+    } 
+
+    function pad2(num)
+    {
+        if(num < 10) {
+            num = '0' + num;
+        }
+        return num;
+    }
+
+    function timeFormat(event){
+        if(event.allDay)
+        {
+            return "All Day"
+        }
+        else 
+        {
+            var dateStr = '';
+            try
+            {
+                if(event.start.getDate() == event.end.getDate())
+                {
+                    var start = to12Hr(event.start)
+                    
+                    var end = to12Hr(event.end)
+
+                    if(start.amPm == end.amPm)
+                    {
+                        dateStr =dateStr + start.time + " – " + end.time + end.amPm;
+                    }
+                    else
+                    {
+                        dateStr =dateStr + start.time + start.amPm + " – " + end.time + end.amPm;
+                    }
+                }  
+
+            }
+            catch(e)
+            {
+                var start = to12Hr(event.start)
+                dateStr = dateStr + start.time + start.amPm;
+            }
+            return dateStr;
+        }
+    }
+
+    function changeCalView(dateStr){
+
+        var start = new Date();
+        start.setHours(0,0,0,0);
+        var dateArr = dateStr.split("/");
+        start.setMonth(dateArr[0] - 1);
+        start.setDate(dateArr[1]);
+        start.setFullYear(dateArr[2]);
+
+        var oneWeek = new Date(start.getTime() + 5*24*60*60*1000);
+        calendar.changeView('listWeekFromToday', {start:start, end:oneWeek});
+        calendar.changeView('listWeekFromToday', {start:start, end:oneWeek});
+
+    }
+
+    var today = new Date(); 
+    var dateStr = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
+    document.getElementById("datepicker").value = dateStr;
+    try{loadCalendar();}catch(e){console.warn(e)}
+    loadBulletin(dateStr);
+
+</script>
+
+<script>
+    function print(){
+        w=window.open();
+        w.document.write(
+            '<style>' + 
+                document.getElementById("printImport").innerHTML + 
+                '.bDay{ width:100% }'+
+                '#bDayText{ width: 100%; display: flex; flex-wrap: wrap; justify-content: space-evenly; }' +
+                '#bDayText p{ padding: 5px; margin: 0px; width: 185px; }'+
+                '#announcementH1{ text-align: center; }'+
+                'h2{ width:100% }'+
+                '.divider-horizontal{ print-color-adjust: exact; }'+
+                '.body-text{ font-size:14px }'+
+                '.divider-horizontal{ margin-bottom: 8px; margin-top: 8px; }'+
+                '.datepicker-container{ font-size: 18px !important; }'+
+            '</style>'+
+            '<div class="top-bar flex-container">' +
+                '<div class="datepicker-container h2">'+
+                    document.getElementById('datepicker').value +
+                '</div>'+  
+                '<div class="h2">Daily Bulletin</div>' +
+            '</div>' +
+            '<div class="divider-horizontal"></div>'+
+            '<div class="flex-container" id="bulletinContainer">'  +
+                document.getElementById('bdayContainer').innerHTML + 
+                '<div class="divider-horizontal"></div>'+
+                document.getElementById('announcementCont').innerHTML + 
+            '</div>'
+        );
+        w.print();
+        w.close();
+    }
+</script>
+
+</html>
+
+    
+    
