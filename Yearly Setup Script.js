@@ -5,23 +5,23 @@ const School_End_Date = new Date(Date.parse("06-02-2023"));
 
 /* This Code Is Commented to avoid accedental executions. Uncomment when needed*/
 
-function fill_bulletin_days_School_Year(){
-  var endOfBulletinsMS =  School_End_Date.getTime();
+// function fill_bulletin_days_School_Year(){
+//   var endOfBulletinsMS =  School_End_Date.getTime();
 
-  //opens the Bulletin_Data Spreadsheet
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var upcoming_sheet = ss.getSheetByName("Bulletin_Data");
+//   //opens the Bulletin_Data Spreadsheet
+//   var ss = SpreadsheetApp.getActiveSpreadsheet();
+//   var upcoming_sheet = ss.getSheetByName("Bulletin_Data");
 
-  var currentDay = School_Start_Date; //Starts Making bulletins from the start of school
+//   var currentDay = School_Start_Date; //Starts Making bulletins from the start of school
 
-  while(currentDay.getTime() < endOfBulletinsMS){
-    if(currentDay.getDay() >=1 && currentDay.getDay() <= 5){ //Doesn't Create bulletins for sunday (day 0) or Saturday (day 6)
-      upcoming_sheet.appendRow([(currentDay.getMonth()+1)+"/"+currentDay.getDate()+"/"+currentDay.getFullYear()]);
-    }
-    currentDay.setDate(currentDay.getDate()+1);
-    Logger.log(currentDay);
-  }
-}
+//   while(currentDay.getTime() < endOfBulletinsMS){
+//     if(currentDay.getDay() >=1 && currentDay.getDay() <= 5){ //Doesn't Create bulletins for sunday (day 0) or Saturday (day 6)
+//       upcoming_sheet.appendRow([(currentDay.getMonth()+1)+"/"+currentDay.getDate()+"/"+currentDay.getFullYear()]);
+//     }
+//     currentDay.setDate(currentDay.getDate()+1);
+//     Logger.log(currentDay);
+//   }
+// }
 
 
 function load_birthdays(){

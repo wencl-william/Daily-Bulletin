@@ -9,6 +9,8 @@
     <link href='https://5il.co/n5mn' rel='stylesheet' />
     <script type="text/javascript" src="https://5il.co/n5ml"></script>
 
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"> 
@@ -529,7 +531,6 @@
 
 
 <script>
-    var PAGES = {};
 
     window.onresize = function(){ console.log(window.innerWidth)}
 
@@ -565,7 +566,6 @@
         document.getElementById("loader-container").style.display = "block";
 
         var onResponse = function(response){
-            PAGES[dateStr] = response;
             document.getElementById("bDayText").innerHTML = response.birthday;
             document.getElementById("staffOutText").innerHTML = response.staffOut;
             document.getElementById("announcementText").innerHTML = response.announcement;
@@ -573,10 +573,20 @@
             document.getElementById("loader-container").style.display = "none";
         }
 
+        var onResponseCal = function(response){
+            //calendar.addEventSource(JSON.parse(response));
+        }
+
         //else
         console.log("Fetching page")
         google.script.run.withSuccessHandler(onResponse).getJsonData(dateStr);
+        google.script.run.withSuccessHandler(onResponseCal).getCalEvents(dateStr);
+
         changeCalView(dateStr);
+    }
+
+    function loadCalView(dateStr){
+      
     }
 
     var calendar = null;
@@ -591,16 +601,12 @@
 
         var calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
-
             googleCalendarApiKey: 'AIzaSyCKoP3lWp8luydNCwG4Ztk2FdSG56Ldl0s',
             eventSources: [
                 {
-                    googleCalendarId: 'c_7ueu4b0leo6otmfp8rkam08b94@group.calendar.google.com'// 'cleveland@cleveland.k12.mn.us'
+                    //googleCalendarId: 'c_7ueu4b0leo6otmfp8rkam08b94@group.calendar.google.com'// 'cleveland@cleveland.k12.mn.us'
                 },
-                {
-                    //googleCalendarId: 'c_ip58rejhsf62bmhbl99isn8fdc@group.calendar.google.com',
-                    //className: 'nice-event'
-                }
+                
             ],
             
             headerToolbar: {
