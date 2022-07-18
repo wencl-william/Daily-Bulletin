@@ -1,15 +1,15 @@
 function doGet() {
 
   //re-enable once access is given
-  // if(!GroupsApp.getGroupByEmail("CPS-All-Staff@isd391.org").hasUser(Session.getActiveUser())){
-  //    return HtmlService.createHtmlOutputFromFile("DenyAccess")
-  // }
+  if(!GroupsApp.getGroupByEmail("CPS-All-Staff@isd391.org").hasUser(Session.getActiveUser())){
+     return HtmlService.createHtmlOutputFromFile("DenyAccess")
+  }
 
   
   var bulletinPageT = HtmlService.createTemplateFromFile('DailyBulletin');
 
   //**************************//re-enable once access is given
-  bulletinPageT.IsMod = false;//GroupsApp.getGroupByEmail("DailyBulletin-Group@isd391.org").hasUser(Session.getActiveUser());
+  bulletinPageT.IsMod = GroupsApp.getGroupByEmail("DailyBulletin-Group@isd391.org").hasUser(Session.getActiveUser());
 
   return bulletinPageT.evaluate();
 }
