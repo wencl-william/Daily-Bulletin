@@ -7,7 +7,7 @@ function doGet() {
 
   
   var bulletinPageT = HtmlService.createTemplateFromFile('DailyBulletin');
-
+  
   //**************************//re-enable once access is given
   bulletinPageT.IsMod = GroupsApp.getGroupByEmail("DailyBulletin-Group@isd391.org").hasUser(Session.getActiveUser());
 
@@ -96,25 +96,3 @@ function getRowFromSheet_(dateStr, sheetName){
     
 //    console.log(getBulletinData_(dateStr));
 //  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
