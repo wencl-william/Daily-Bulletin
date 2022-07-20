@@ -92,7 +92,7 @@ function getRowFromSheet_(dateStr, sheetName){
 
 //  function test345t(){
 
-//    var dateStr = "9/6/2022"
+//    var dateStr = "9/30/2022"
     
 //    console.log(getBulletinData_(dateStr));
 //  }

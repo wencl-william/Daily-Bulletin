@@ -8,7 +8,8 @@ function getCalEvents(dateStr) {
   var eventJsons = [];
   for(var i=0;i<events.length; i++){
     var temp = {extendedProps:{}};
-    temp.name = events[i].getTitle();
+    temp.title = events[i].getTitle();
+    temp.id = events[i].getId();
     try{temp.start = events[i].getStartTime().getTime();}catch(e){temp.start = null;}
     try{temp.end = events[i].getEndTime().getTime();}catch(e){temp.end = null;}
     try{temp.extendedProps.location = events[i].getLocation();}catch(e){temp.extendedProps.location = "";}
