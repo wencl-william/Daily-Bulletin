@@ -6569,7 +6569,7 @@ var FullCalendar = (function (exports) {
         else{
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.setRequestHeader('Accept', 'application/json');
-            xhr.setRequestHeader('Authorization', 'Bearer ya29.A0AVA9y1voLLb0REMN3fgudsbLSv2kqj4eVKiiuFaYZlqX0GG76iUYlDFfET5RNYrw4CBXqYmrbrDPugZiR9Gdneydh2igz6XPXmSuWeuOPBSAOspoG-Xt7BvR5DZZdbw_xFGXd8n_gnPDSevv2EwYF8W14358mZEwg9vDVo5Ker8YUNnWUtBVEFTQVRBU0ZRRTY1ZHI4QWFueXlmeWFHVUhqd3MyX3l3RmxQdw0178');
+            xhr.setRequestHeader('Authorization', <?!= "'Bearer "+ScriptApp.getOAuthToken()+"'"?>);
 
         }
         xhr.onload = function () {

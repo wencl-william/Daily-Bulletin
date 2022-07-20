@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> 
 
     <link href='https://5il.co/n5mn' rel='stylesheet' />
-    <?!= HtmlService.createHtmlOutputFromFile('FullCalendarIO_ModifiedForOauth').getContent(); ?>
+    <?!= HtmlService.createTemplateFromFile('FullCalendarIO_ModifiedForOauth').evaluate().getContent(); ?>
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -260,6 +260,35 @@
             font-family: Verdana, Geneva, sans-serif;
         }
 
+        .staffOnly .fc-list-event-dot {
+          border-color: #4679da !important;
+        }
+
+        #calendarKey {
+          /*! text-align: center; */
+          display: flex;
+          width:  100%;
+          justify-content: space-evenly;
+        }
+        .keyItem {
+          display: flex;
+          font-size: 14px;
+          font-family: 'Roboto', Arial, sans-serif;
+        }
+        .keyColor {
+        
+          border: 4px solid #D04100;
+        
+          display: inline-block;
+          border-radius: 5px;
+          margin-top: auto;
+          margin-bottom: auto;
+          margin-right: 5px;
+        }
+        .keyColor.staffOnly {
+          border-color: #4679da;
+        }
+
         .button-panel .glyphicon{
             font-size: 15px;
             font-weight: bold;
@@ -285,7 +314,7 @@
         @media (max-width: 1100px) {
             .largeScreen{display: none !important;}
             .mobile{display: block;}
-            .fc-direction-ltr .fc-list-table .fc-list-event-graphic{display: none}
+            /* .fc-direction-ltr .fc-list-table .fc-list-event-graphic{display: none} */
             .fc-list-event-time{display: none !important;}
             .fc-list-event-title{display: none !important;}
             .fc .fc-list-table td{border-top: 0px; border-bottom: 0px;}
@@ -489,6 +518,18 @@
         </div>
         <div class="flex-item cal-container">
             <h2>Upcoming Events</h2>
+            
+            <div id="calendarKey">  
+              <span class="keyItem">
+                <span class="keyColor"></span>
+                School &amp; Community
+              </span>
+              <span class="keyItem"> 
+                <span class="keyColor staffOnly"></span>
+                Staff Only
+              </span>
+            </div>
+
             <div id='calendar'></div>
         </div>
         <div class="divider-horizontal"></div>
@@ -901,7 +942,6 @@
         var oneWeek = new Date(start.getTime() + 5*24*60*60*1000);
         calendar.changeView('customList', {start:start, end:oneWeek});
         calendar.refetchEvents();
-  calendar.rerender();
     }
 
     var today = new Date(); 
