@@ -7,12 +7,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> 
 
     <link href='https://5il.co/n5mn' rel='stylesheet' />
-    <script type="text/javascript" src="https://5il.co/n5ml"></script>
+    <?!= HtmlService.createHtmlOutputFromFile('FullCalendarIO_ModifiedForOauth').getContent(); ?>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"> 
     
+
     <style>
         .top-bar{
             margin-bottom: 25px;
@@ -529,9 +531,8 @@
 
 
 <script>
-    var PAGES = {};
 
-    window.onresize = function(){ console.log(window.innerWidth)}
+    // window.onresize = function(){ console.log(window.innerWidth)}
 
 
     $(function() {
@@ -565,7 +566,6 @@
         document.getElementById("loader-container").style.display = "block";
 
         var onResponse = function(response){
-            PAGES[dateStr] = response;
             document.getElementById("bDayText").innerHTML = response.birthday;
             document.getElementById("staffOutText").innerHTML = response.staffOut;
             document.getElementById("announcementText").innerHTML = response.announcement;
@@ -576,8 +576,10 @@
         //else
         console.log("Fetching page")
         google.script.run.withSuccessHandler(onResponse).getJsonData(dateStr);
+
         changeCalView(dateStr);
     }
+      
 
     var calendar = null;
             
@@ -591,16 +593,16 @@
 
         var calendarEl = document.getElementById('calendar');
         calendar = new FullCalendar.Calendar(calendarEl, {
-
-            googleCalendarApiKey: 'AIzaSyCKoP3lWp8luydNCwG4Ztk2FdSG56Ldl0s',
+            googleCalendarApiKey: 'AIzaSyAQUTHxj9Lg28o4ggPycaILViTELRlMJZ0',
             eventSources: [
                 {
-                    googleCalendarId: 'c_7ueu4b0leo6otmfp8rkam08b94@group.calendar.google.com'// 'cleveland@cleveland.k12.mn.us'
+                    googleCalendarId:  'cleveland@cleveland.k12.mn.us', //'c_7ueu4b0leo6otmfp8rkam08b94@group.calendar.google.com'//
+                    className: "staffOnly"
                 },
                 {
-                    //googleCalendarId: 'c_ip58rejhsf62bmhbl99isn8fdc@group.calendar.google.com',
-                    //className: 'nice-event'
+                    googleCalendarId:  'c_7ueu4b0leo6otmfp8rkam08b94@group.calendar.google.com'//
                 }
+                
             ],
             
             headerToolbar: {
@@ -610,12 +612,11 @@
             },
             
 
-            initialView: 'listWeekFromToday',
+            initialView: 'customList',
 
             views: {
-                listWeekFromToday: {
+                customList: {
                     type: 'list',
-                    buttonText: 'Week',
                     visibleRange: {start: calToday, end: calOneWeek},
                     headerToolbar: {
                         left: '',
@@ -624,17 +625,6 @@
                     },
                 },
             }, 
-            
-            viewDidMount: function(view,element) {
-                if(view.view.type == "listWeekFromToday"){
-                    //listWeekFromToday
-                    $('.fc-next-button,.fc-toolbar-title, .fc-prev-button, .fc-today-button').hide();
-                    // console.log("in");
-                }else{
-                                //listYear
-                    $('.fc-next-button,.fc-toolbar-title, .fc-prev-button, .fc-today-button').show();
-                    // console.log("notIn");
-            }},
 
             height: 'auto',
             stickyHeaderDates: false,
@@ -899,7 +889,7 @@
         }
     }
 
-    function changeCalView(dateStr){
+    async function changeCalView(dateStr){
 
         var start = new Date();
         start.setHours(0,0,0,0);
@@ -909,9 +899,9 @@
         start.setFullYear(dateArr[2]);
 
         var oneWeek = new Date(start.getTime() + 5*24*60*60*1000);
-        calendar.changeView('listWeekFromToday', {start:start, end:oneWeek});
-        calendar.changeView('listWeekFromToday', {start:start, end:oneWeek});
-
+        calendar.changeView('customList', {start:start, end:oneWeek});
+        calendar.refetchEvents();
+  calendar.rerender();
     }
 
     var today = new Date(); 
