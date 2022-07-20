@@ -57,6 +57,10 @@ function getBulletinData_(dateStr){
   return getRowFromSheet_(dateStr, "Bulletin_Data")
 }
 
+function requireCalAppForPermissions_(){
+  CalendarApp.getEventsForDay(new Date());
+}
+
 function getRowFromSheet_(dateStr, sheetName){
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName); 
   var column = 1; //column Index   

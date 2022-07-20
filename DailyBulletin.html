@@ -572,7 +572,7 @@
 
 
 <script>
-
+    const NUM_DAYS_TO_SHOW_CAL = 2
     // window.onresize = function(){ console.log(window.innerWidth)}
 
 
@@ -629,7 +629,7 @@
         var calToday = new Date();
         calToday.setHours(0);
         calToday.setMinutes(0);
-        var calOneWeek = new Date(calToday.getTime() + 5*24*60*60*1000);
+        var calOneWeek = new Date(calToday.getTime() + NUM_DAYS_TO_SHOW_CAL*24*60*60*1000);
         
 
         var calendarEl = document.getElementById('calendar');
@@ -939,7 +939,7 @@
         start.setDate(dateArr[1]);
         start.setFullYear(dateArr[2]);
 
-        var oneWeek = new Date(start.getTime() + 5*24*60*60*1000);
+        var oneWeek = new Date(start.getTime() + NUM_DAYS_TO_SHOW_CAL*24*60*60*1000);
         calendar.changeView('customList', {start:start, end:oneWeek});
         calendar.refetchEvents();
     }
