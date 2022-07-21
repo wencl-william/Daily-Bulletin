@@ -204,10 +204,11 @@ function toString_(obj){
                  "Does it appear on multiple daily bulletins?",
                  "Would you like to remove it or change it?",
                  "If you answered change it, what would you like to change it too?",
+                 "Would you like to add, remove, or edit the event?",
+                 "Which calendar should the event be on?",
                  "What is the event title?",
                  "When does the event start?",
                  "Optional: If the event spans multiple days when does it end?",
-                 "Would you like to add, remove, or edit the event?",
                  "Optional: If you are editing the event, what change would you like to make?",
                  "Enter any relevant information needed",
                 ]
