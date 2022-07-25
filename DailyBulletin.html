@@ -16,6 +16,9 @@
     
 
     <style>
+        #announcementH1{
+            text-align: left;
+        }
         .hover:hover {
           text-decoration: underline;
         }
@@ -424,9 +427,6 @@
             font-weight: normal;
             margin-top: 0px;
             margin-bottom: 10px;
-        }
-        #announcementH1{
-            text-align: left;
         }
         .announcements{
             width:100%
@@ -969,6 +969,23 @@
 
 <script>
     function print(){
+      var sportToHtml = function(sportEvents){
+        console.log(sportEvents);
+
+        var html = "<table>";
+  
+        for(var i=0; i<sportEvents.length;i++){
+          html += '<tr><td style="min-width:60px; max-width:70px">'+sportEvents[i].time+'</td>'+
+                  '<td>'+sportEvents[i].title+'</td><td>'+sportEvents[i].location+
+                  '</td><td>' + sportEvents[i].description + '</td></tr>';
+        }
+
+        html += "</table>";
+        return html
+      }
+      var printHelper = function(sportEvents){
+              console.log(sportEvents);
+
         w=window.open();
         w.document.write(
             '<style>' + 
@@ -982,6 +999,11 @@
                 '.body-text{ font-size:14px }'+
                 '.divider-horizontal{ margin-bottom: 8px; margin-top: 8px; }'+
                 '.datepicker-container{ font-size: 18px !important; }'+
+                'td { padding-left: 5px; padding-top: 5px; padding-bottom: 5px; vertical-align: top; }'+
+                'table { border-collapse:collapse; }'+
+                'tr { border:1px solid #ececec; }'+
+
+
             '</style>'+
             '<div class="top-bar flex-container">' +
                 '<div class="datepicker-container h2">'+
@@ -994,11 +1016,18 @@
                 document.getElementById('bdayContainer').innerHTML + 
                 '<div class="divider-horizontal"></div>'+
                 document.getElementById('announcementCont').innerHTML + 
+                '<div class="divider-horizontal"></div>'+
+                '<h2 id="sportsH1">Sports</h2>'+
+                '<div id="sportsBody" class="body-text">'+sportToHtml(sportEvents)+'</div>'+
             '</div>'
         );
         w.stop();
         w.print();
         w.close();
+      }
+
+    
+      google.script.run.withSuccessHandler(printHelper).getSportsEvents(document.getElementById("datepicker").value);
     }
 </script>
 
