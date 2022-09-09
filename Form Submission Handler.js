@@ -208,7 +208,7 @@ function toString_(obj){
                  "Which calendar should the event be on?",
                  "What is the event title?",
                  "When does the event start?",
-                 "Optional: If the event spans multiple days when does it end?",
+                 "When does the event end?",
                  "Optional: If you are editing the event, what change would you like to make?",
                  "Enter any relevant information needed",
                 ]

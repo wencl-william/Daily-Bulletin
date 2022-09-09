@@ -179,7 +179,7 @@ function toHalfBirthdayDate_(dateVal){
 
 function codeToGrade_(code){
   if(code == "KG" || code == "HK"){return "Kindergarten"}
-  else if (code == "EC"){return "PreK"}
+  else if (code == "EE"){return "PreK"}
   else {return "Grade " + code}
 }
 
