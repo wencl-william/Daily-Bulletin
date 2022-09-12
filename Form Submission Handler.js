@@ -143,6 +143,7 @@ function autoAddAnnouncement_(formResponse, Items){
       //Logger.log(announcementDataColumn)
       upcoming_sheet.getRange("D3:D300").setValues(announcementDataColumn);
     }
+    cacheWeek();
     return Status
   }catch(e){
     console.warn(e);
