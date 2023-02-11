@@ -50,7 +50,7 @@
             font-size: 16px;
             color: inherit;
         }
-        .bDay{
+        .foodMenu{
             /* background-color: #103311; */
             width: 23.7%;
         }
@@ -179,7 +179,7 @@
         }
 
         @media (max-width:810px){
-            .bDay{
+            .foodMenu{
                 width: 100%;
             }
             #bDayText{
@@ -417,6 +417,55 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
         }
+
+        /*Applies to All Screen Sizes*/
+        .dining-menu-header {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap-reverse;
+        } 
+        
+        .dining-menu-header>.button-panel{
+            font-weight: normal;
+            font-size: 17px;
+        }
+
+        .dining-menu-item>p{
+            margin-top: 3px;
+            margin-bottom: 10px;
+        }
+
+
+        .dining-menu-day {
+            color: #D04100;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 20px;
+        }
+
+        .dining-menu-item {
+            color: #4f4f4f;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 17px;
+        }
+
+        .dining-menu {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        /*Styling for screens <= 1020px*/
+        @media screen and (min-width: 900px) and (max-width: 1021px) {
+            .dining-menu-flex-item {
+                margin: 3px;
+            }
+        }
+
+        @media screen and (min-width: 500px) and (max-width: 900px) {
+            .dining-menu-flex-item {
+                margin: 0px;
+            }
+        }
+
     </style>
 
     <style id="printImport">
@@ -507,10 +556,189 @@
     <div class="divider-horizontal" style="margin-top: 0px;"></div>
     
     <div class="flex-container" id="bulletinContainer">
-        <div id="bdayContainer" class="flex-item bDay">
-            <h2>Happy Birthday</h2>
-            <div id="bDayText" class="body-text"></div>
+        <div id="foodMenuContainer" class="flex-item foodMenu">
+          <h2>Menu</h2>
+          <div class="dining-menu-header">
+              <select id="mealSelector" class="button-panel" name="mealSelector" onchange="diningMenuOnMealSelect()">
+                  <option value="0">Breakfast</option>
+                  <option value="1" selected>Lunch</option>
+              </select>
+              <select id="diningSelect1" class="button-panel" name="diningSelect1" onchange="diningMenuOnSelect()">
+                  <option value="0">This Week</option>
+                  <option value="1">Next Week</option>
+              </select>
+          </div>
+          
+          <div id="lunchMenu" class="dining-menu">
+
+              <div class="dining-menu-flex-container">
+                  <!--Start of Lunch Menu Items-->
+                  <div id="mondayLunch" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Monday</div>
+                      <div class="dining-menu-item">
+                          <p id="mondayMenuLunch"></p>
+                      </div>
+                  </div>
+                  <!--End of id=mondayLunch-->
+
+                  <div id="tuesdayLunch" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Tuesday</div>
+                      <div class="dining-menu-item">
+                          <p id="tuesdayMenuLunch"></p>
+                      </div>
+                  </div>
+                  <!--End of id=tuesdayLunch-->
+
+                  <div id="wednesdayLunch" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Wednesday</div>
+                      <div class="dining-menu-item">
+                          <p id="wednesdayMenuLunch"></p>
+                      </div>
+                  </div>
+                  <!--End of id=wednesdayLunch-->
+
+                  <div id="thursdayLunch" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Thursday</div>
+                      <div class="dining-menu-item">
+                          <p id="thursdayMenuLunch"></p>
+                      </div>
+                  </div>
+                  <!--End of id=thursdayLunch-->
+
+                  <div id="fridayLunch" class="dining-menu-flex-item dining-menu-friday">
+                      <div class="dining-menu-day">Friday</div>
+                      <div class="dining-menu-item">
+                          <p id="fridayMenuLunch"></p>
+                      </div>
+                  </div>
+                  <!--End of id=fridayLunch-->
+
+              </div>
+              <!--End of Lunch Menu Items-->
+          </div> <!--End of id=lunchMenu-->
+          <div id="breakfastMenu" style="display: none;" class="dining-menu">
+              <div class="dining-menu-flex-container">
+                  <!--Start of Breakfast Menu Items-->
+                  <div id="mondayBreakfast" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Monday</div>
+                      <div class="dining-menu-item">
+                          <p id="mondayMenuBreakfast"></p>
+                      </div>
+                  </div>
+                  <!--End of id=mondayBreakfast-->
+
+                  <div id="tuesdayBreakfast" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Tuesday</div>
+                      <div class="dining-menu-item">
+                          <p id="tuesdayMenuBreakfast"></p>
+                      </div>
+                  </div>
+                  <!--End of id=tuesdayBreakfast-->
+
+                  <div id="wednesdayBreakfast" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Wednesday</div>
+                      <div class="dining-menu-item">
+                          <p id="wednesdayMenuBreakfast"></p>
+                      </div>
+                  </div>
+                  <!--End of id=wednesdayBreakfast-->
+
+                  <div id="thursdayBreakfast" class="dining-menu-flex-item">
+                      <div class="dining-menu-day">Thursday</div>
+                      <div class="dining-menu-item">
+                          <p id="thursdayMenuBreakfast"></p>
+                      </div>
+                  </div>
+                  <!--End of id=thursdayBreakfast-->
+
+                  <div id="fridayBreakfast" class="dining-menu-flex-item dining-menu-friday">
+                      <div class="dining-menu-day">Friday</div>
+                      <div class="dining-menu-item">
+                          <p id="fridayMenuBreakfast"></p>
+                      </div>
+                  </div>
+                  <!--End of id=fridayBreakfast-->
+
+              </div>
+              <!--End of Breakfast Menu Items-->
+          </div> <!--End of id=BreakfastMenu-->
+
+          <script>
+              const thisWeekJson = "https://thrillshare.com/api/v2/s/107364/menus?locale=en&query_id=17981";
+              const nextWeekJson = "https://thrillshare.com/api/v2/s/107364/menus?locale=en&query_id=17982";
+
+              const lunchIds = ["mondayMenuLunch", "tuesdayMenuLunch", "wednesdayMenuLunch", "thursdayMenuLunch", "fridayMenuLunch"];
+              const breakfastIds = ["mondayMenuBreakfast", "tuesdayMenuBreakfast", "wednesdayMenuBreakfast", "thursdayMenuBreakfast", "fridayMenuBreakfast"];
+
+              var xmlhttp = new XMLHttpRequest();
+              xmlhttp.onreadystatechange = function () {
+                  if (this.readyState == 4 && this.status == 200) {
+                      var menus = JSON.parse(this.responseText);
+                      try {
+                          menus = menus.menus
+                          for (var i = 0; i < 5; i++) {
+                              if (menus[i] != null) {
+                                  var menuFormatting = menus[i].lunch;
+                                  menuFormatting = menuFormatting.replaceAll('\r\nOR\r\n', ' OR<br />');
+                                  menuFormatting = menuFormatting.replaceAll('\r\nOr\r\n', ' Or<br />');
+                                  menuFormatting = menuFormatting.replaceAll('\r\nor\r\n', ' or<br />');
+                                  menuFormatting = menuFormatting.replaceAll('\r\n',' | ');
+                                  document.getElementById(lunchIds[i]).innerHTML = menuFormatting;
+                                  
+                                  var menuFormatting =menus[i].breakfast;
+                                  menuFormatting = menuFormatting.replaceAll('\r\nOR\r\n', ' OR<br />');
+                                  menuFormatting = menuFormatting.replaceAll('\r\nOr\r\n', ' Or<br />');
+                                  menuFormatting = menuFormatting.replaceAll('\r\nor\r\n', ' or<br />');
+                                  menuFormatting = menuFormatting.replaceAll('\r\n',' | ');
+                                  document.getElementById(breakfastIds[i]).innerHTML = menuFormatting;
+                              }
+                              else {
+                                  document.getElementById(lunchIds[i]).innerHTML = "";
+                                  document.getElementById(breakfastIds[i]).innerHTML = "";
+                              }
+                          }
+                      } catch (e) {
+                          for (var i = 0; i < 5; i++) {
+                              document.getElementById(lunchIds[i]).innerHTML = "";
+                              document.getElementById(breakfastIds[i]).innerHTML = "";
+                          }
+                      }
+                  }
+              };
+
+
+              xmlhttp.open("GET", thisWeekJson, true);
+              xmlhttp.send();
+
+
+              function diningMenuOnSelect() {
+                  var dropdown = document.getElementById("diningSelect1");
+                  if (dropdown.value == 0) {
+                      xmlhttp.open("GET", thisWeekJson, true);
+                      xmlhttp.send();
+                  }
+                  else if (dropdown.value == 1) {
+                      xmlhttp.open("GET", nextWeekJson, true);
+                      xmlhttp.send();
+                  }
+              }
+
+              function diningMenuOnMealSelect() {
+                  var dropdown = document.getElementById("mealSelector");
+                  if (dropdown.value == 0) {
+                      document.getElementById("lunchMenu").style.display = "none";
+                      document.getElementById("breakfastMenu").style.display = "unset";
+                      
+                  }
+                  else if (dropdown.value == 1) {
+                      document.getElementById("breakfastMenu").style.display = "none";
+                      document.getElementById("lunchMenu").style.display = "unset";
+                  }
+              }
+
+          </script>
         </div>
+
         <div class="divider-horizontal bDayDivider"></div>
         <div class="flex-item spacer bDayDivider">
             <div class="divider-vertical"></div>
@@ -522,7 +750,7 @@
         <div class="flex-item spacer staffOutDivider">
             <div class="divider-vertical"></div>
         </div>
-        <div class="flex-item cal-container">
+        <div class="flex-item cal-container"> <!-- And B-day Container -->
             <h2>Upcoming Events</h2>
             
             <div id="calendarKey">  
@@ -546,6 +774,13 @@
               <svg style="margin-top: auto; margin-bottom: auto; margin-left: 8px" ;="" width="22" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden"><defs><clipPath id="clip0"><path d="M427 250 446 250 446 267 427 267Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip1"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip2"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip3"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip4"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip5"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs><g clip-path="url(#clip0)" transform="translate(-427 -250)"><g clip-path="url(#clip1)"><g clip-path="url(#clip2)"><g clip-path="url(#clip3)"><g clip-path="url(#clip4)"><g clip-path="url(#clip5)"><path d="M4.43998 5.70856 4.43998 3.80571 0.634285 7.61141C0.586713 7.61141 4.43998 11.417 4.43998 11.417L4.43998 9.51428 14.5885 7.61141 4.43998 5.70856Z" fill="#D04100" transform="matrix(-0.721125 0.693353 -0.69309 -0.720851 450.273 255.767)"></path></g></g></g><path d="M42.0677 26.2176 42.0677 39.2952" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 26.2176 51.2062 26.2176" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 38.809 55.0465 38.809" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M0 0-0.000101686-8.27331" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-1.01913 -0 -0 1 442.278 265.727)"></path><path d="M56.5514 39.5271 50.0123 39.5271" stroke="#D04100" stroke-width="0.603467" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path></g></g></g></svg></a>
 
             </p>
+
+            <div class="divider-horizontal"></div>
+
+            <div id="bdayContainer" class="flex-item bDay">
+                <h2>Happy Birthday</h2>
+                <div id="bDayText" class="body-text"></div>
+            </div>
         </div>
         <div class="divider-horizontal"></div>
 
