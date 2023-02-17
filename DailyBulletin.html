@@ -1219,6 +1219,17 @@
         return html
       }
       var printHelper = function(sportEvents){
+        let lunchRequest = new XMLHttpRequest();
+        lunchRequest.open('GET', 'https://thrillshare.com/api/v2/s/107364/menus?locale=en', false);  // `false` makes the request synchronous
+        lunchRequest.send();
+        let lunch = "Data Not Found";
+        if (lunchRequest.status === 200) {
+            lunch = JSON.parse(lunchRequest.responseText).menus[0].lunch;
+            lunch = lunch.replaceAll('\r\nOR\r\n', ' OR ');
+            lunch = lunch.replaceAll('\r\nOr\r\n', ' Or ');
+            lunch = lunch.replaceAll('\r\nor\r\n', ' or ');
+            lunch = lunch.replaceAll('\r\n',' | ');
+        }
               console.log(sportEvents);
 
         w=window.open();
@@ -1247,7 +1258,12 @@
                 '<div class="h2">Daily Bulletin</div>' +
             '</div>' +
             '<div class="divider-horizontal"></div>'+
-            '<div class="flex-container" id="bulletinContainer">'  +
+            '<div class="flex-container" id="bulletinContainer">' +
+                '<div style="width: 100%;text-align: center;">' +
+                    '<span class="h2"> Lunch: </span>' +
+                    lunch +
+                '</div>' +
+                '<div class="divider-horizontal"></div>'+
                 document.getElementById('bdayContainer').innerHTML + 
                 '<div class="divider-horizontal"></div>'+
                 document.getElementById('announcementCont').innerHTML + 
@@ -1264,6 +1280,9 @@
     
       google.script.run.withSuccessHandler(printHelper).getSportsEvents(document.getElementById("datepicker").value);
     }
+</script>
+<script>
+  setInterval(refreshBulletin, 300000) //300,000ms = 5min;
 </script>
 
 </html>

@@ -20,7 +20,7 @@ function onSubmit(sheetResponse) {
   
   if(formResponse != null){
     var action = formResponse.getResponseForItem(Items.actionQuestion).getResponse();
-    if(action == "Add a new announcement."){
+    if(action == "Add a new ANNOUNCEMENT."){
       if(autoAddAnnouncement_(formResponse, Items) == "sucess"){
         return
       }
@@ -52,13 +52,13 @@ function sendEmailofResponse_(sheetResponse){
   Logger.log(JSON.stringify(sheetResponse,null,4));
 
   var emailSubject = "Daily Bulletin Form: Add/Edit/Delete";
-  if(sheetResponse["What would you like to do?"] == "Add a new announcement."){
+  if(sheetResponse["What would you like to do?"] == "Add a new ANNOUNCEMENT."){
     emailSubject = "Daily Bulletin Form: Add Announcement";
   }
-  else if(sheetResponse["What would you like to do?"] == "Change or remove an existing announcement."){
+  else if(sheetResponse["What would you like to do?"] == "Change or remove an existing ANNOUNCEMENT."){
     emailSubject = "Daily Bulletin Form: Change/Delete Announcement";
   }
-  else if(sheetResponse["What would you like to do?"] == "Add, change, or remove an upcoming event."){
+  else if(sheetResponse["What would you like to do?"] == "Add, change, or remove an UPCOMING EVENT."){
     emailSubject = "Daily Bulletin Form: Add/Change/Delete Event";
   }
 
