@@ -50,11 +50,78 @@ function getCachedDate_(dateVal){
 
 
 function getArchivedBulletinData_(dateStr){
-  return getRowFromSheet_(dateStr, "Archived_Bulletins")
+  let data = getRowFromSheet_(dateStr, "Archived_Bulletins");
+  try{
+    let announcementString = data.announcement;
+
+    let http = announcementString.search("https://");
+    let newString = "";
+
+    while(http != -1){
+      newString += announcementString.slice(0,http);
+      announcementString = announcementString.slice(http, announcementString.length);
+
+      newString += '<a href="';
+      let space = announcementString.search(/\s/);
+      if(space == -1){
+        newString = newString + announcementString + '" target="_blank">'+ announcementString + '</a>';
+        announcementString = "";
+      }
+      else{
+        let url = announcementString.slice(0,space);
+        announcementString = announcementString.slice(space, announcementString.length);
+
+        newString += url + '" target="_blank">'+ url + '</a>';
+      }
+
+      http = announcementString.search("https://");
+    }
+    newString += announcementString;
+
+    data.announcement = newString;
+  }
+  catch(e){
+    console.log(e);
+  }
+
+  return data;
 }
 
 function getBulletinData_(dateStr){
-  return getRowFromSheet_(dateStr, "Bulletin_Data")
+  let data = getRowFromSheet_(dateStr, "Bulletin_Data");
+  try{
+    let announcementString = data.announcement;
+
+    let http = announcementString.search("https://");
+    let newString = "";
+
+    while(http != -1){
+      newString += announcementString.slice(0,http);
+      announcementString = announcementString.slice(http, announcementString.length);
+
+      newString += '<a href="';
+      let space = announcementString.search(/\s/);
+      if(space == -1){
+        newString = newString + announcementString + '" target="_blank">'+ announcementString + '</a>';
+        announcementString = "";
+      }
+      else{
+        let url = announcementString.slice(0,space);
+        announcementString = announcementString.slice(space, announcementString.length);
+
+        newString += url + '" target="_blank">'+ url + '</a>';
+      }
+
+      http = announcementString.search("https://");
+    }
+    newString += announcementString;
+
+    data.announcement = newString;
+  }
+  catch(e){
+    console.log(e);
+  }
+  return data;
 }
 
 function requireCalAppForPermissions_(){
