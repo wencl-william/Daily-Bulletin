@@ -63,11 +63,13 @@ function sendEmailofResponse_(sheetResponse){
   }
 
   var emailBody = sheetResponse["Email Address"] + ' submitted a response to the "Daily Bulletin Add/Edit/Delete" google form at ' 
-                  + sheetResponse["Timestamp"] +" and it was not able to be processed automatically. The questions and their responses are listed below: \n\n" + toString_(sheetResponse);
+                  + sheetResponse["Timestamp"] +" and it was not able to be processed automatically. The questions and their responses are listed below: <br><br>" + toString_(sheetResponse);
 
   Logger.log(emailBody);
 
-  GmailApp.sendEmail(Emails,emailSubject,emailBody);
+  //GmailApp.sendEmail(Emails,emailSubject,emailBody);
+  MailApp.sendEmail({to:Emails, subject:emailSubject, htmlBody: emailBody});
+
 }
 
 function autoAddAnnouncement_(formResponse, Items){
@@ -221,7 +223,7 @@ function toString_(obj){
   var string = "";
   for(var i =0; i<order.length;i++){
     if(obj[order[i]] != null){
-      string += "    " + order[i] + ":   " + obj[order[i]] + "\n";
+      string += "    <b>" + order[i] + ":</b>   " + obj[order[i]] + "<br>";
       delete obj[order[i]];
     }
   }
@@ -229,7 +231,7 @@ function toString_(obj){
   var keys = Object.keys(obj);
   for(var i = 0; i<keys.length; i++){
     if(obj[order[i]] != null){
-      string += "    " + order[i] + ":   " + obj[order[i]] + "\n";
+      string += "    <b>" + order[i] + ":</b>   " + obj[order[i]] + "<br>";
       delete obj[order[i]];
     }
   }
