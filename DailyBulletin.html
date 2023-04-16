@@ -679,25 +679,31 @@
                       var menus = JSON.parse(this.responseText);
                       try {
                           menus = menus.menus
+
+                          for (var i = 0; i < 5; i++) {
+                                document.getElementById(lunchIds[i]).innerHTML = "";
+                                document.getElementById(breakfastIds[i]).innerHTML = "";
+                          }
+                          
                           for (var i = 0; i < 5; i++) {
                               if (menus[i] != null) {
+                                  let menuDayIndex = new Date(Date.parse(menus[i].date + " 19:00:00 GMT-0500")).getDay();
+                                  menuDayIndex = menuDayIndex - 1; //Reindex since there is no sunday; 
+
+
                                   var menuFormatting = menus[i].lunch;
                                   menuFormatting = menuFormatting.replaceAll('\r\nOR\r\n', ' OR<br />');
                                   menuFormatting = menuFormatting.replaceAll('\r\nOr\r\n', ' Or<br />');
                                   menuFormatting = menuFormatting.replaceAll('\r\nor\r\n', ' or<br />');
                                   menuFormatting = menuFormatting.replaceAll('\r\n',' | ');
-                                  document.getElementById(lunchIds[i]).innerHTML = menuFormatting;
+                                  document.getElementById(lunchIds[menuDayIndex]).innerHTML = menuFormatting;
                                   
                                   var menuFormatting =menus[i].breakfast;
                                   menuFormatting = menuFormatting.replaceAll('\r\nOR\r\n', ' OR<br />');
                                   menuFormatting = menuFormatting.replaceAll('\r\nOr\r\n', ' Or<br />');
                                   menuFormatting = menuFormatting.replaceAll('\r\nor\r\n', ' or<br />');
                                   menuFormatting = menuFormatting.replaceAll('\r\n',' | ');
-                                  document.getElementById(breakfastIds[i]).innerHTML = menuFormatting;
-                              }
-                              else {
-                                  document.getElementById(lunchIds[i]).innerHTML = "";
-                                  document.getElementById(breakfastIds[i]).innerHTML = "";
+                                  document.getElementById(breakfastIds[menuDayIndex]).innerHTML = menuFormatting;
                               }
                           }
                       } catch (e) {
