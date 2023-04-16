@@ -678,7 +678,7 @@
                   if (this.readyState == 4 && this.status == 200) {
                       var menus = JSON.parse(this.responseText);
                       try {
-                          menus = menus.menus
+                          menus = menus.menus 
 
                           for (var i = 0; i < 5; i++) {
                                 document.getElementById(lunchIds[i]).innerHTML = "";
