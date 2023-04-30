@@ -21,7 +21,7 @@ function onSubmit(sheetResponse) {
   if(formResponse != null){
     var action = formResponse.getResponseForItem(Items.actionQuestion).getResponse();
     if(action == "Add a new ANNOUNCEMENT."){
-      if(autoAddAnnouncement_(formResponse, Items) == "sucess"){
+      if(autoAddAnnouncement_(formResponse, Items) == "success"){
         return
       }
       else{  
@@ -30,11 +30,18 @@ function onSubmit(sheetResponse) {
       }
     }
     else if(action == "Add, change, or remove an UPCOMING EVENT."){
-      var alsoAddAnnouncement = formResponse.getResponseForItem(Items.alsoAddAnnouncement).getResponse();
+      let alsoAddAnnouncement = formResponse.getResponseForItem(Items.alsoAddAnnouncement).getResponse();
       if(alsoAddAnnouncement == "Yes"){
-        autoAddAnnouncement_(formResponse, Items);
-        sendEmailofResponse_(sheetResponse);
-        return
+        if(autoAddAnnouncement_(formResponse, Items) != "success"){ 
+          sendEmailofResponse_(sheetResponse);
+        }
+      }
+
+      let eventAction = formResponse.getResponseForItem(Items.eventAction).getResponse();
+      if(eventAction == "Add"){
+        if(handleCalendarAddition_(formResponse, Items) == "success"){
+          return
+        }
       }
     }
   }
@@ -53,6 +60,12 @@ function getQuestionItems_(){
           startDate:thisForm.getItemById("2135405645"),
           lastDate:thisForm.getItemById("228187413"),
           alsoAddAnnouncement:thisForm.getItemById("761102068"),
+          eventAction:thisForm.getItemById("434864585"),
+          eventCalendar:thisForm.getItemById("1296892701"),
+          eventTitle:thisForm.getItemById("252394138"),
+          eventStart:thisForm.getItemById("458566727"),
+          eventEnd:thisForm.getItemById("1625141392"),
+          eventExtra:thisForm.getItemById("1232852418")
         }
 }
 
@@ -68,7 +81,7 @@ function sendEmailofResponse_(sheetResponse){
     emailSubject = "Daily Bulletin Form: Change/Delete Announcement";
   }
   else if(sheetResponse["What would you like to do?"] == "Add, change, or remove an UPCOMING EVENT."){
-    emailSubject = "Daily Bulletin Form: Add/Change/Delete Event";
+    emailSubject = "Daily Bulletin Form: Change or Delete Event";
   }
 
   var emailBody = sheetResponse["Email Address"] + ' submitted a response to the "Daily Bulletin Add/Edit/Delete" google form at ' 
@@ -87,7 +100,7 @@ function autoAddAnnouncement_(formResponse, Items){
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var upcoming_sheet = ss.getSheetByName("Bulletin_Data");
-    var bulletin ={bulletins:upcoming_sheet.getRange("A3:D300").getDisplayValues(), bulletinLen:0, sucess:true}
+    var bulletin ={bulletins:upcoming_sheet.getRange("A3:D300").getDisplayValues(), bulletinLen:0, success:true}
     for(var i =0 ; i <bulletin.bulletins.length; i++){
       if(bulletin.bulletins[i][0] != ""){
         bulletin.bulletins[i][0] = Date.parse(bulletin.bulletins[i][0]);
@@ -103,9 +116,9 @@ function autoAddAnnouncement_(formResponse, Items){
     if(multiple == 'No'){
       Logger.log("Single Day");
       bulletin = addToDate_(announcement, toDateVal_(formResponse.getResponseForItem(Items.singleDate).getResponse()), bulletin)
-      if(bulletin.sucess){
-        Status = "sucess";
-        Logger.log("sucess 78")
+      if(bulletin.success){
+        Status = "success";
+        Logger.log("success 78")
       }
       else{
         Status = "failure";
@@ -127,26 +140,26 @@ function autoAddAnnouncement_(formResponse, Items){
 
         while (currentDate.getTime() <= lastDate.getTime()){
           bulletin = addToDate_(announcement, currentDate.getTime() , bulletin);
-          if(bulletin.sucess){
-            resultList.push("sucess");
+          if(bulletin.success){
+            resultList.push("success");
           }
           currentDate.setDate(currentDate.getDate() + 1);
         }
-        if(resultList.indexOf("sucess")==-1){
+        if(resultList.indexOf("success")==-1){
           Status = "failure";
           //Logger.log("failure 105")
           Logger.log("print 105");
         }
         else{
-          Status = "sucess";
-          //Logger.log("sucess 108")
+          Status = "success";
+          //Logger.log("success 108")
           Logger.log("print 108");
         }
       }
     }
 
     //Logger.log(bulletin.bulletins);
-    if(Status == "sucess"){
+    if(Status == "success"){
       var announcementDataColumn = [];
       for(var i=0; i<bulletin.bulletins.length; i++){
         announcementDataColumn.push([bulletin.bulletins[i][3]])
@@ -175,12 +188,12 @@ function addToDate_(announcement, dateVal, bulletin){
 
   Logger.log("bulletinRowIndex: "+ bulletinRowIndex);
   if(bulletinRowIndex == -1){
-    bulletin.sucess = false;
+    bulletin.success = false;
     return bulletin;
   }
   else{
     bulletin.bulletins[bulletinRowIndex][3] = (bulletin.bulletins[bulletinRowIndex][3] +"\n\n"+ announcement).trim();
-    bulletin.sucess = true;
+    bulletin.success = true;
     return bulletin;
   }
 }
