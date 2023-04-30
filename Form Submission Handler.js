@@ -29,6 +29,14 @@ function onSubmit(sheetResponse) {
         return
       }
     }
+    else if(action == "Add, change, or remove an UPCOMING EVENT."){
+      var alsoAddAnnouncement = formResponse.getResponseForItem(Items.alsoAddAnnouncement).getResponse();
+      if(alsoAddAnnouncement == "Yes"){
+        autoAddAnnouncement_(formResponse, Items);
+        sendEmailofResponse_(sheetResponse);
+        return
+      }
+    }
   }
 
   sendEmailofResponse_(sheetResponse);
@@ -43,7 +51,8 @@ function getQuestionItems_(){
           multipleDays:thisForm.getItemById("1043846175"),
           singleDate:thisForm.getItemById("2013911231"),
           startDate:thisForm.getItemById("2135405645"),
-          lastDate:thisForm.getItemById("228187413")
+          lastDate:thisForm.getItemById("228187413"),
+          alsoAddAnnouncement:thisForm.getItemById("761102068"),
         }
 }
 
@@ -197,7 +206,14 @@ function searchingMatchForm_(array, start, end, val){
 
 function toString_(obj){
   const order = ["What would you like to do?",
-                 "Enter the announcement EXACTLY as you want it to appear in the daily bulletin",
+                 "Would you like to add, remove, or edit the event?",
+                 "Which calendar should the event be on?",
+                 "What is the event title?",
+                 "When does the event start?",
+                 "When does the event end?",
+                 "Optional: If you are editing the event, what change would you like to make?",
+                 "Would you like to add an announcement for the event as well?",
+                 "Enter the announcement EXACTLY as you want it to appear in the daily bulletin.",
                  "Should the announcement appear on multiple days?",
                  "What day should it be in the Daily Bulletin?",
                  "What day should it start appearing in the daily bulletin?",
@@ -207,12 +223,6 @@ function toString_(obj){
                  "Does it appear on multiple daily bulletins?",
                  "Would you like to remove it or change it?",
                  "If you answered change it, what would you like to change it too?",
-                 "Would you like to add, remove, or edit the event?",
-                 "Which calendar should the event be on?",
-                 "What is the event title?",
-                 "When does the event start?",
-                 "When does the event end?",
-                 "Optional: If you are editing the event, what change would you like to make?",
                  "Enter any relevant information needed",
                 ]
 
@@ -230,9 +240,9 @@ function toString_(obj){
 
   var keys = Object.keys(obj);
   for(var i = 0; i<keys.length; i++){
-    if(obj[order[i]] != null){
-      string += "    <b>" + order[i] + ":</b>   " + obj[order[i]] + "<br>";
-      delete obj[order[i]];
+    Logger.log("Key "+i+": "+obj[keys[i]]);
+    if(obj[keys[i]] != null){
+      string += "    <b>" + keys[i] + ":</b>   " + obj[keys[i]] + "<br>";
     }
   }
   return string
