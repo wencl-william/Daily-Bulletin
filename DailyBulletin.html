@@ -1213,33 +1213,29 @@
 
 <script>
     function print(){
-      var sportToHtml = function(sportEvents){
-        console.log(sportEvents);
-
-        var html = "<table>";
-  
-        for(var i=0; i<sportEvents.length;i++){
-          html += '<tr><td style="min-width:60px; max-width:70px">'+sportEvents[i].time+'</td>'+
-                  '<td>'+sportEvents[i].title+'</td><td>'+sportEvents[i].location+
-                  '</td><td>' + sportEvents[i].description + '</td></tr>';
-        }
-
-        html += "</table>";
-        return html
-      }
-      var printHelper = function(sportEvents){
+      
+      
         let lunchRequest = new XMLHttpRequest();
         lunchRequest.open('GET', 'https://thrillshare.com/api/v2/s/107364/menus?locale=en', false);  // `false` makes the request synchronous
         lunchRequest.send();
         let lunch = "Data Not Found";
         if (lunchRequest.status === 200) {
-            lunch = JSON.parse(lunchRequest.responseText).menus[0].lunch;
-            lunch = lunch.replaceAll('\r\nOR\r\n', ' OR ');
-            lunch = lunch.replaceAll('\r\nOr\r\n', ' Or ');
-            lunch = lunch.replaceAll('\r\nor\r\n', ' or ');
-            lunch = lunch.replaceAll('\r\n',' | ');
+          try{
+            let lunchResp = JSON.parse(lunchRequest.responseText);
+            let printDate = (new Date(Date.parse(document.getElementById('datepicker').value))).getTime()
+            for(var i = 0; i < lunchResp.menus.length; i++){
+              if((new Date(Date.parse(lunchResp.menus[i].date))).getTime() == printDate){
+                lunch = lunchResp.menus[i].lunch;
+                lunch = lunch.replaceAll('\r\nOR\r\n', ' OR ');
+                lunch = lunch.replaceAll('\r\nOr\r\n', ' Or ');
+                lunch = lunch.replaceAll('\r\nor\r\n', ' or ');
+                lunch = lunch.replaceAll('\r\n',' | ');
+              }
+            }
+          }catch(e){
+            lunch = "Data Not Found";
+          }
         }
-              console.log(sportEvents);
 
         w=window.open();
         w.document.write(
@@ -1277,18 +1273,12 @@
                 document.getElementById('bdayContainer').innerHTML + 
                 '<div class="divider-horizontal"></div>'+
                 document.getElementById('announcementCont').innerHTML + 
-                '<div class="divider-horizontal"></div>'+
-                '<h2 id="sportsH1">Sports</h2>'+
-                '<div id="sportsBody" class="body-text">'+sportToHtml(sportEvents)+'</div>'+
+                
             '</div>'
         );
         w.stop();
         w.print();
         w.close();
-      }
-
-    
-      google.script.run.withSuccessHandler(printHelper).getSportsEvents(document.getElementById("datepicker").value);
     }
 </script>
 <script>

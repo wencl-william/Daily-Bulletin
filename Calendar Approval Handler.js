@@ -1,3 +1,12 @@
+/**
+ * This file contains all the functions needed to handle the addition 
+ * and moderation of new calendar events. It has two access point. The
+ * first is handleCalendar Addition_ which is called from Form Submission 
+ * Handler.gs when someone requests a new event be added. The second is 
+ * onApprovalFormTriggerSubmit which is triggered when someone submits a
+ * response to the Daily Bulletin Events Approval Google Form. 
+ */
+
 const Daily_Bulletin_Cal_Approval_FormId = "1XFaQ7kak6_3KpsLUclGKjJxbqATq8o_3h-OOzT5DORA";
 
 
@@ -6,6 +15,7 @@ function handleCalendarAddition_(formResponse, items) {
     let email = formResponse.getRespondentEmail();
     console.log("Submited by: "+email);
 
+    //Get form data into variables
     let calendarRequested = processSelectedCalendar_(formResponse, items);
     let eventName = formResponse.getResponseForItem(items.eventTitle).getResponse();
     let eventStart = formatDateString(formResponse.getResponseForItem(items.eventStart).getResponse());
@@ -14,8 +24,11 @@ function handleCalendarAddition_(formResponse, items) {
     try{
       eventExtra = formResponse.getResponseForItem(items.eventExtra).getResponse();
     } catch(e){ eventExtra = "" };
-
-    let approvalForm = FormApp.openById(Daily_Bulletin_Cal_Approval_FormId );
+    
+    
+    if(calendarRequested == "School & Community"){
+      //Add events going to our public calendar to a moderated form for approval
+      let approvalForm = FormApp.openById(Daily_Bulletin_Cal_Approval_FormId );
 
       console.info("Question is being created.");
 
@@ -36,10 +49,23 @@ function handleCalendarAddition_(formResponse, items) {
 
       console.info("Question Has Been Created. Sending Email");
 
+      //email moderators the request to approve or reject
       let modEmailSubject = "Daily Bulletin Form: Add Event";
 
       MailApp.sendEmail({to:Emails, subject:modEmailSubject, htmlBody: modEmailBody});
       return "success";
+    }
+    else{
+      //add staff calendar events straight to calendar
+      let data = {};
+      data.calendarRequested = calendarRequested;
+      data.eventName = eventName;
+      data.eventStart = eventStart;
+      data.eventEnd = eventEnd;
+      addToCalendar_(data);
+      return "success";
+
+    }
 
   }catch(e){
     console.warn(e);
@@ -47,6 +73,9 @@ function handleCalendarAddition_(formResponse, items) {
   }
 }
 
+/**
+ * Shortens the calendar name to its expected name
+ */
 function processSelectedCalendar_(formResponse, items){
   let calResponse =  formResponse.getResponseForItem(items.eventCalendar).getResponse();
 
@@ -77,20 +106,23 @@ function formatDateString(datestr){
 // }
 
 
-
+/**
+ * These functions handle the approval form responses. For any accepted events 
+ * it adds them to the events calendar. For rejected events and events that 
+ * are going to be manually added it just removes them from the form.
+ */
 function onApprovalFormTriggerSubmit(event){
   try{onApprovalFormSubmit_(event)}catch(e){
     try{
       MailApp.sendEmail("wencl.william@isd391.org", "Daily Bulletin Event Approval Error", JSON.stringify(event, null, 4)+" \n\n "+JSON.stringify(e,null,4)) 
-      MailApp.sendEmail(Emails, "Error - Daily Bulletin Form: Add Event", "There was an error processing the approval form. Please ensure that the event was posted as expected. If not try to approve it again in a few minutes. If the error persists, please manually add the event and contact the Tech office. <br><br>Approval form: https://forms.gle/yrdZTqJ5j73keusX8");
+      MailApp.sendEmail({to:Emails, subject: "Error - Daily Bulletin Form: Add Event", htmlBody: "There was an error processing the approval form. Please ensure that the event was posted as expected. If not try to approve it again in a few minutes. If the error persists, please manually add the event and contact the Tech office. <br><br>Approval form: https://forms.gle/yrdZTqJ5j73keusX8"});
     }catch(e){
       MailApp.sendEmail("wencl.william@isd391.org", "Daily Bulletin Event Approval Error",event+" \n\n "+e)
-      MailApp.sendEmail(Emails, "Error - Daily Bulletin Form: Add Event", "There was an error processing the approval form. Please ensure that the event was posted as expected. If not try to approve it again in a few minutes. If the error persists, please manually add the event and contact the Tech office. <br><br>Approval form: https://forms.gle/yrdZTqJ5j73keusX8");
+      MailApp.sendEmail({to:Emails, subject: "Error - Daily Bulletin Form: Add Event", htmlBody: "There was an error processing the approval form. Please ensure that the event was posted as expected. If not try to approve it again in a few minutes. If the error persists, please manually add the event and contact the Tech office. <br><br>Approval form: https://forms.gle/yrdZTqJ5j73keusX8"});
     }
     throw e
   }
 }
-
 function onApprovalFormSubmit_(formResponse){
   let approvalForm = FormApp.openById(Daily_Bulletin_Cal_Approval_FormId );
 
@@ -137,8 +169,6 @@ function extractData_(itemData){
   var helpTextSplit = itemData.helpText.match(regx);
   console.log(helpTextSplit);
   if(helpTextSplit != null){
-    //yeilds: [Multi Day Request 11/02/2021 to 11/05/2021 from 11:01 am to 5:01 pm each day. Submitted by: webmaster@isd391.org, Multi Day Request, 11/02/2021, 11/05/2021, 11:01 am, 5:01 pm, webmaster@isd391.org]
-
 
       data.eventStart = helpTextSplit[1];
       data.eventEnd = helpTextSplit[2];

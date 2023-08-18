@@ -1,8 +1,28 @@
+/**
+ * This file contains main functions for the web app deployment. It 
+ * includes the function that serves the html pages as well as the 
+ * function the retrieves bulletin data for the requested day. 
+ */
+
+
+/**
+ * This function is the default function to handle a get request for 
+ * a web app. As our site is only serving data to users, it only needs 
+ * to handle get requests. First it checks if the user is a part of the 
+ * cps-staff@isd391.org email group. If the user is not, it returns the 
+ * DenyAccess.html file. This is just an extra layer of security incase 
+ * someone got ahold of the direct link, as the Google Site also 
+ * requires you to be signed in as a member of the group. If the user is 
+ * a member of the staff group, it checks if they are also a member of 
+ * the DailyBulletin-Group@isd391.org group. This determines whether it
+ * fills in the Edit Spreadsheet Data button before it sends the 
+ * DailyBulletin.html file to the user. 
+ */
 function doGet() {
 
   //re-enable once access is given
   if(!GroupsApp.getGroupByEmail("CPS-All-Staff@isd391.org").hasUser(Session.getActiveUser())){
-     return HtmlService.createHtmlOutputFromFile("DenyAccess")
+     return HtmlService.createHtmlOutputFromFile("DenyAccess") //Show the access denied page to users not part of the all staff group
   }
 
   
@@ -14,16 +34,20 @@ function doGet() {
   return bulletinPageT.evaluate();
 }
 
+
 function getJsonData(fetchDateText){
   return getJsonDataPrivate_(fetchDateText)
 }
 
+/**
+ * This function directs bulletin requests to the cache, archive, or upcoming bulletins
+ */
 function getJsonDataPrivate_(fetchDateText) { 
   var today = new Date();
   today.setHours(0,0,0,0);
   today = today.getTime();
-  var oneWeek = today + 7*24*60*60*1000;
-  var yesterday = today - 24*60*60*1000;
+  var oneWeek = today + 7*24*60*60*1000; //Time values in milliseconds
+  var yesterday = today - 24*60*60*1000; //Time values in milliseconds 
 
   /****************************************************************************************************** */
   const fetchDateVal = Date.parse(fetchDateText);

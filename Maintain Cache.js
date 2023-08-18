@@ -1,3 +1,13 @@
+/**
+ * This file maintains a cache of the daily bulletins for the next 
+ * 5 days as well as the bulletin for the current day and the previous 
+ * day. These bulletins are used the most and by caching them it speeds 
+ * loading the bulletin. The cache updates every night between 4am and
+ * 5am and anytime a change is made to the spreadsheet. It preps the 
+ * data for each bulletin and stores it as a script property with the 
+ * date as its key.
+ */
+
 function onEdit(){
   cacheWeek();
 }

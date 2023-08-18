@@ -1,3 +1,16 @@
+/**
+ * This handles submissions to the Announcement & Event Form (Also 
+ * referred to as the Daily Bulletin Add/Edit/Delete Form). The code 
+ * tries to automatically create announcements with the autoAddAnnouncement_
+ * function and calls the handleCalendarAddition_ function defined in 
+ * Calendar Approval Handler.gs to try to add calendar events. If the 
+ * request is for anything other than adding an announcement or adding an 
+ * event, or if the automatic processes fail, an email is formed and sent 
+ * to the DailyBulletin-Group@isd391.org email group. This email contains 
+ * all the information needed to fulfill the requests. 
+ */
+
+
 const Daily_Bulletin_AddEditDelete_FormId = "1cC0fHhidsm-5FchOQrHHt6o0Y6tJ79QFcPh0PqiveUQ";
 const Emails = "DailyBulletin-Group@isd391.org";
 
@@ -14,12 +27,18 @@ const Emails = "DailyBulletin-Group@isd391.org";
 //   Logger.log(autoAddAnnouncement_(formResponse, Items));
 // }
 
+/**
+ * Process the form submission and direct the request through the 
+ * proper functions and automations. 
+ */
 function onSubmit(sheetResponse) {
   const Items = getQuestionItems_();
   var formResponse = getFormAppResponse_(sheetResponse);
   
   if(formResponse != null){
-    var action = formResponse.getResponseForItem(Items.actionQuestion).getResponse();
+    //Gets the respose to the "What would you like to do?" question
+    var action = formResponse.getResponseForItem(Items.actionQuestion).getResponse(); 
+
     if(action == "Add a new ANNOUNCEMENT."){
       if(autoAddAnnouncement_(formResponse, Items) == "success"){
         return
@@ -45,7 +64,6 @@ function onSubmit(sheetResponse) {
       }
     }
   }
-
   sendEmailofResponse_(sheetResponse);
   return 1
 }
@@ -69,6 +87,10 @@ function getQuestionItems_(){
         }
 }
 
+/**
+ * Formats the subject line of the email, calls a function to generate
+ * the body, and then send the email.
+ */
 function sendEmailofResponse_(sheetResponse){
   sheetResponse = trimObject_(sheetResponse.namedValues);
   Logger.log(JSON.stringify(sheetResponse,null,4));
@@ -94,13 +116,21 @@ function sendEmailofResponse_(sheetResponse){
 
 }
 
+/**
+ * This function takes in a form response and loads the data for all future 
+ * bulletins. It checks whether the announcement is for a single day or 
+ * multiple days and adds the announcement to all the days its supposed to 
+ * be on. Then it writes that data back to the spreadsheet. 
+ */
 function autoAddAnnouncement_(formResponse, Items){
   try{
     var Status = "";
 
+    //Retrieves the data from the Bulletin_Data sheet
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var upcoming_sheet = ss.getSheetByName("Bulletin_Data");
     var bulletin ={bulletins:upcoming_sheet.getRange("A3:D300").getDisplayValues(), bulletinLen:0, success:true}
+    //Filters out empty rows, then converts the text date to a date object
     for(var i =0 ; i <bulletin.bulletins.length; i++){
       if(bulletin.bulletins[i][0] != ""){
         bulletin.bulletins[i][0] = Date.parse(bulletin.bulletins[i][0]);
@@ -108,21 +138,22 @@ function autoAddAnnouncement_(formResponse, Items){
       }
     }
 
+    //retrieves the announcement that was submitted through the form 
     var announcement = formResponse.getResponseForItem(Items.announcement).getResponse();
 
     try{Logger.log(formResponse.getRespondentEmail())}catch(e){};
     
+    //gets the response to the "Should the announcement appear on multiple days?" question
     var multiple = formResponse.getResponseForItem(Items.multipleDays).getResponse();
     if(multiple == 'No'){
       Logger.log("Single Day");
+      //Adds the announcement to the bulletin data for a single day 
       bulletin = addToDate_(announcement, toDateVal_(formResponse.getResponseForItem(Items.singleDate).getResponse()), bulletin)
       if(bulletin.success){
         Status = "success";
-        Logger.log("success 78")
       }
       else{
         Status = "failure";
-        Logger.log("failure 81")
       }
     }
     else{
@@ -132,12 +163,12 @@ function autoAddAnnouncement_(formResponse, Items){
 
       if(startDate.getTime() > lastDate.getTime()){
         Status = "failure";
-        Logger.log("failure 90")
       }
       else{
         var resultList = [];
         var currentDate = startDate;
 
+        //loops through the dates adding the announcement to the bulletin days
         while (currentDate.getTime() <= lastDate.getTime()){
           bulletin = addToDate_(announcement, currentDate.getTime() , bulletin);
           if(bulletin.success){
@@ -145,20 +176,20 @@ function autoAddAnnouncement_(formResponse, Items){
           }
           currentDate.setDate(currentDate.getDate() + 1);
         }
+
+        //If the announcement wasn't sucessfully added to at least 1 day, mark the status failed
         if(resultList.indexOf("success")==-1){
           Status = "failure";
-          //Logger.log("failure 105")
-          Logger.log("print 105");
         }
         else{
           Status = "success";
-          //Logger.log("success 108")
-          Logger.log("print 108");
         }
       }
     }
 
     //Logger.log(bulletin.bulletins);
+
+    //If successful write back the new announcement column to the spreadsheet.
     if(Status == "success"){
       var announcementDataColumn = [];
       for(var i=0; i<bulletin.bulletins.length; i++){
@@ -167,6 +198,7 @@ function autoAddAnnouncement_(formResponse, Items){
       //Logger.log(announcementDataColumn)
       upcoming_sheet.getRange("D3:D300").setValues(announcementDataColumn);
     }
+    //update the cache to improve retreival speed.
     cacheWeek();
     return Status
   }catch(e){
@@ -180,6 +212,10 @@ function toDateVal_(dateStr){//format in "2021-10-01"
   return Date.parse(dateStr.slice(5) + "-" + dateStr.slice(0,4))
 }
 
+/**
+ * Adds the provided announcement to the stored bulletin data
+ * The data must still be written back to the spreadsheet elsewhere
+ */
 function addToDate_(announcement, dateVal, bulletin){
   Logger.log(dateVal);
   Logger.log(new Date(dateVal));
@@ -217,6 +253,11 @@ function searchingMatchForm_(array, start, end, val){
   }
 }
 
+
+/** 
+ * Makes an ordered and formatted string out of the response object
+ * used to make the emails straightfoward and easy to read
+ */
 function toString_(obj){
   const order = ["What would you like to do?",
                  "Would you like to add, remove, or edit the event?",
