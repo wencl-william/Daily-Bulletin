@@ -68,7 +68,7 @@ function getJsonDataPrivate_(fetchDateText) {
 }
 
 function getCachedDate_(dateVal){
-  try{return Utilities.jsonParse(ScriptProperties.getProperty(dateVal))}
+  try{return JSON.parse(PropertiesService.getScriptProperties().getProperty(dateVal))}
   catch(e){return {staffOut:"No Bulletin Found, Try Another Date", birthday:"No Bulletin Found, Try Another Date", announcement:"No Bulletin Found, Try Another Date"} }  
 
 }

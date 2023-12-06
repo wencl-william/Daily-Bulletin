@@ -67,7 +67,7 @@ function cacheWeek() {
 
   }
 
-  Cache[Date.parse(rowData.date)] = Utilities.jsonStringify(rowData);
+  Cache[Date.parse(rowData.date)] = JSON.stringify(rowData);
   
   /* Next 7 days */
   var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Bulletin_Data").getRange(3,1,6,4).getDisplayValues();
@@ -124,9 +124,9 @@ function cacheWeek() {
 
     }
 
-    Cache[Date.parse(rowData.date)] = Utilities.jsonStringify(rowData);
+    Cache[Date.parse(rowData.date)] = JSON.stringify(rowData);
   }
   
-  ScriptProperties.deleteAllProperties()
-  ScriptProperties.setProperties(Cache)
+  PropertiesService.getScriptProperties().deleteAllProperties()
+  PropertiesService.getScriptProperties().setProperties(Cache)
 }
