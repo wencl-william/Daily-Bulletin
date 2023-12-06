@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id="mainPage">
 <head>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
@@ -158,9 +158,6 @@
             .top-bar .button-panel{
                 order: 3;
             }
-            .button-panel.mod{
-                margin-right: auto;
-            }
         }
 
         @media (max-width:600px){
@@ -235,13 +232,19 @@
         }
 
         .button-panel.mod{
-            margin-left: auto;
+            margin-left: 5px;
+            margin-right: 5px;
             max-width: fit-content;
             display: inherit !important;
         }
         .refresh:hover{
             background-color: #ececec;
             border-radius: 50px;
+        }
+        .Special-Menu-Container{
+          display: flex;
+          justify-content: right;
+          flex-wrap:wrap-reverse;
         }
         
     
@@ -468,7 +471,6 @@
                 margin: 0px;
             }
         }
-
     </style>
 
     <style id="printImport">
@@ -525,18 +527,44 @@
             margin-top: 0px;
             margin-bottom: 0px;
         }
+       
     </style>
 </head>
 
 <body>
-    <? if (IsMod) { ?>
+    <? if (HasClassListAuth) { ?>
+      <div class="Special-Menu-Container">
         <h4 class="button-panel mod">
-            <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://docs.google.com/spreadsheets/d/1ITgzDy-8jQq2Ss_P0UEWisbmvRJ7NL0oBoKv1p_Fdvs/edit">
-                Edit Spreadsheet Data 
-                <svg style="margin-top: auto; margin-bottom: auto; margin-left: 8px" ;="" width="22" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden"><defs><clipPath id="clip0"><path d="M427 250 446 250 446 267 427 267Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip1"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip2"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip3"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip4"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip5"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs><g clip-path="url(#clip0)" transform="translate(-427 -250)"><g clip-path="url(#clip1)"><g clip-path="url(#clip2)"><g clip-path="url(#clip3)"><g clip-path="url(#clip4)"><g clip-path="url(#clip5)"><path d="M4.43998 5.70856 4.43998 3.80571 0.634285 7.61141C0.586713 7.61141 4.43998 11.417 4.43998 11.417L4.43998 9.51428 14.5885 7.61141 4.43998 5.70856Z" fill="#D04100" transform="matrix(-0.721125 0.693353 -0.69309 -0.720851 450.273 255.767)"></path></g></g></g><path d="M42.0677 26.2176 42.0677 39.2952" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 26.2176 51.2062 26.2176" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 38.809 55.0465 38.809" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M0 0-0.000101686-8.27331" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-1.01913 -0 -0 1 442.278 265.727)"></path><path d="M56.5514 39.5271 50.0123 39.5271" stroke="#D04100" stroke-width="0.603467" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path></g></g></g></svg>
-            </a>
+              <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://sites.google.com/isd391.org/cleveland-staff-site/class-lists">
+                  Class Lists 
+              </a>
         </h4>
+        <? if (HasMailingListAuth) { ?>
+          <h4 class="button-panel mod">
+              <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://sites.google.com/isd391.org/cleveland-staff-site/mailing-list">
+                  Mailing List
+              </a>
+          </h4> 
+        <?}?>
+
+      <? if (IsMod) { ?>
+          <h4 class="button-panel mod">
+              <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://docs.google.com/spreadsheets/d/1ITgzDy-8jQq2Ss_P0UEWisbmvRJ7NL0oBoKv1p_Fdvs/edit">
+                  Edit Spreadsheet Data 
+                  <svg style="margin-top: auto; margin-bottom: auto; margin-left: 8px" ;="" width="22" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden"><defs><clipPath id="clip0"><path d="M427 250 446 250 446 267 427 267Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip1"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip2"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip3"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip4"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip5"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs><g clip-path="url(#clip0)" transform="translate(-427 -250)"><g clip-path="url(#clip1)"><g clip-path="url(#clip2)"><g clip-path="url(#clip3)"><g clip-path="url(#clip4)"><g clip-path="url(#clip5)"><path d="M4.43998 5.70856 4.43998 3.80571 0.634285 7.61141C0.586713 7.61141 4.43998 11.417 4.43998 11.417L4.43998 9.51428 14.5885 7.61141 4.43998 5.70856Z" fill="#D04100" transform="matrix(-0.721125 0.693353 -0.69309 -0.720851 450.273 255.767)"></path></g></g></g><path d="M42.0677 26.2176 42.0677 39.2952" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 26.2176 51.2062 26.2176" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 38.809 55.0465 38.809" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M0 0-0.000101686-8.27331" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-1.01913 -0 -0 1 442.278 265.727)"></path><path d="M56.5514 39.5271 50.0123 39.5271" stroke="#D04100" stroke-width="0.603467" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path></g></g></g></svg>
+              </a>
+          </h4>
+          <style>
+            .Special-Menu-Container{
+              justify-content: space-around !important;
+            }
+          </style>
+      <? }?>
+
+      </div>
+
     <? }?>
+
     <div class="top-bar flex-container">
         <div class="datepicker-container">
             <input type="text" id="datepicker" class="datepicker">
@@ -1254,6 +1282,7 @@
                 'table { border-collapse:collapse; }'+
                 'tr { border:1px solid #ececec; }'+
                 'a {color:black !important; text-decoration:none !important}'+
+                '.Special-Menu-Container{display:none !important;}'+
 
 
             '</style>'+

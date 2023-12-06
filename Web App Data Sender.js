@@ -30,6 +30,9 @@ function doGet() {
   
   //**************************//re-enable once access is given
   bulletinPageT.IsMod = GroupsApp.getGroupByEmail("DailyBulletin-Group@isd391.org").hasUser(Session.getActiveUser());
+  bulletinPageT.HasClassListAuth = ClassLists.isAuthorizedUser();
+  bulletinPageT.HasMailingListAuth = MailingLists.isAuthorizedUser();
+
 
   return bulletinPageT.evaluate();
 }

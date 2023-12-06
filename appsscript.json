@@ -1,8 +1,25 @@
 {
   "timeZone": "America/Chicago",
-  "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "ClassLists",
+        "libraryId": "1bBY98VRZwcx2ugkiNyvyDBYkuYvc88fegf-MbWnImv5Cao2dzLOBUnxp",
+        "version": "63"
+      },
+      {
+        "userSymbol": "MailingLists",
+        "libraryId": "1g0QrwSKXMqXAhSwtJVdqTPWTgIAIR2MkX3ek_aTrvzMISwmouUt-2Q94",
+        "version": "9"
+      }
+    ]
+  },
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "DOMAIN"
+  },
   "sheets": {
     "macros": [
       {
@@ -10,9 +27,5 @@
         "functionName": "Test"
       }
     ]
-  },
-  "webapp": {
-    "executeAs": "USER_DEPLOYING",
-    "access": "DOMAIN"
   }
 }
