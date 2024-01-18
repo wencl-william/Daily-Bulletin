@@ -587,7 +587,7 @@
     <div class="divider-horizontal" style="margin-top: 0px;"></div>
     
     <div class="flex-container" id="bulletinContainer">
-        <div id="foodMenuContainer" class="flex-item foodMenu">
+        <div id="foodMenuContainer" class="flex-item foodMenu"> <!--And B-day container-->
           <h2>Menu</h2>
           <div class="dining-menu-header">
               <select id="mealSelector" class="button-panel" name="mealSelector" onchange="diningMenuOnMealSelect()">
@@ -774,6 +774,13 @@
               }
 
           </script>
+
+          <div class="divider-horizontal"></div>
+
+            <div id="bdayContainer" class="flex-item bDay">
+                <h2>Happy Birthday</h2>
+                <div id="bDayText" class="body-text"></div>
+            </div>
         </div>
 
         <div class="divider-horizontal bDayDivider"></div>
@@ -787,7 +794,7 @@
         <div class="flex-item spacer staffOutDivider">
             <div class="divider-vertical"></div>
         </div>
-        <div class="flex-item cal-container"> <!-- And B-day Container -->
+        <div class="flex-item cal-container"> 
             <h2>Upcoming Events</h2>
             
             <div id="calendarKey">  
@@ -812,12 +819,6 @@
 
             </p>
 
-            <div class="divider-horizontal"></div>
-
-            <div id="bdayContainer" class="flex-item bDay">
-                <h2>Happy Birthday</h2>
-                <div id="bDayText" class="body-text"></div>
-            </div>
         </div>
         <div class="divider-horizontal"></div>
 
@@ -893,12 +894,19 @@
         document.getElementById("bulletinContainer").style.display = "none";
         document.getElementById("loader-container").style.display = "block";
 
-        var onResponse = function(response){
+        var onResponse = async function(response){
             document.getElementById("bDayText").innerHTML = response.birthday;
             document.getElementById("staffOutText").innerHTML = response.staffOut;
             document.getElementById("announcementText").innerHTML = response.announcement;
             document.getElementById("bulletinContainer").style.display = "";
             document.getElementById("loader-container").style.display = "none";
+            await sleep(100);
+            let  staffHeight = document.getElementById("staffOutText").offsetHeight; 
+            if (staffHeight < 400){
+              staffHeight = 400
+            }
+            document.getElementById("calendar").style.maxHeight = staffHeight+"px";
+
         }
 
         //else
