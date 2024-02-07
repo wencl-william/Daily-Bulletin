@@ -14,11 +14,11 @@ function archive_bulletins() {
   help_archiving_bulletins_(upcoming_sheet, archive_sheet, today);
 }
 function help_archiving_bulletins_(upcoming_sheet, archive_sheet, today){
-  var range = upcoming_sheet.getRange("A3:D3"); //gets first row of the bulletin data
+  var range = upcoming_sheet.getRange("A3:F3"); //gets first row of the bulletin data
   var date = range.getDisplayValue();
   if(Date.parse(date) < today){ //if its from the past archive it
     archive_sheet.insertRows(3); //add row at the top of the archive sheet
-    archive_sheet.getRange("A3:D3").setValues(range.getValues()); //copy values from the bulletin data sheet to the archive sheet
+    archive_sheet.getRange("A3:F3").setValues(range.getValues()); //copy values from the bulletin data sheet to the archive sheet
     //archive_sheet.appendRow(range.getValues()[0]);
     range.deleteCells(SpreadsheetApp.Dimension.ROWS); //remove top data row from the goole sheet
     help_archiving_bulletins_(upcoming_sheet, archive_sheet, today); //recursive call to check the next row as well

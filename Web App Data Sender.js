@@ -30,9 +30,14 @@ function doGet() {
   
   //**************************//re-enable once access is given
   bulletinPageT.IsMod = GroupsApp.getGroupByEmail("DailyBulletin-Group@isd391.org").hasUser(Session.getActiveUser());
-  bulletinPageT.HasClassListAuth = ClassLists.isAuthorizedUser();
-  bulletinPageT.HasMailingListAuth = MailingLists.isAuthorizedUser();
-
+  if(bulletinPageT.IsMod){
+    bulletinPageT.HasClassListAuth = true;
+    bulletinPageT.HasMailingListAuth = true;
+  }
+  else{
+    bulletinPageT.HasClassListAuth = ClassLists.isAuthorizedUser();
+    bulletinPageT.HasMailingListAuth = MailingLists.isAuthorizedUser();
+  }
 
   return bulletinPageT.evaluate();
 }
@@ -69,7 +74,7 @@ function getJsonDataPrivate_(fetchDateText) {
 
 function getCachedDate_(dateVal){
   try{return JSON.parse(PropertiesService.getScriptProperties().getProperty(dateVal))}
-  catch(e){return {staffOut:"No Bulletin Found, Try Another Date", birthday:"No Bulletin Found, Try Another Date", announcement:"No Bulletin Found, Try Another Date"} }  
+  catch(e){return {staffOut:"No Bulletin Found, Try Another Date", birthday:"No Bulletin Found, Try Another Date", announcement:"No Bulletin Found, Try Another Date", status:""} }  
 
 }
 
@@ -161,8 +166,8 @@ function getRowFromSheet_(dateStr, sheetName){
   var columnValues = sheet.getRange(3, column, sheet.getLastRow(),1).getDisplayValues(); //1st & 2nd rows are header
   for(var i=0; i< columnValues.length; i++){
     if(columnValues[i][0] == dateStr){
-        var values = sheet.getRange(i + 3, 1,1,4).getDisplayValues();
-        var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3]}
+        var values = sheet.getRange(i + 3, 1,1,6).getDisplayValues();
+        var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3], status:values[0][4], fixed:false}
 
         if(rowData.staffOut == ""){
           rowData.staffOut = "No Staff Out Today";
@@ -180,12 +185,46 @@ function getRowFromSheet_(dateStr, sheetName){
           rowData.announcement = "No Anouncements Today"
         }
 
+        if(rowData.status == "" && values[0][5] != ""){
+          rowData.fixed = true;
+          rowData.status = values[0][5];
+        }
+        else if(values[0][5] != ""){
+          rowData.status += " <br><br>"+values[0][5];
+        }
+
+        let http = rowData.status.search("https://");
+        let newString = "";
+
+        while(http != -1){
+          newString += rowData.status.slice(0,http);
+          rowData.status = rowData.status.slice(http, rowData.status.length);
+
+          newString += '<a href="';
+          let space = rowData.status.search(/\s/);
+          if(space == -1){
+            newString = newString + rowData.status + '" target="_blank">Learn more</a>';
+            rowData.status = "";
+          }
+          else{
+            let url = rowData.status.slice(0,space);
+            rowData.status = rowData.status.slice(space, rowData.status.length);
+
+            newString += url + '" target="_blank">Learn more.</a>';
+          }
+
+          http = rowData.status.search("https://");
+        }
+        newString += rowData.status;
+
+        rowData.status = newString;
+
         return rowData;
 
     }
   }
   
-  return {date:dateStr, staffOut:"No Bulletin Found, Try Another Date", birthday:"No Bulletin Found, Try Another Date", announcement:"No Bulletin Found, Try Another Date"}   
+  return {date:dateStr, staffOut:"No Bulletin Found, Try Another Date", birthday:"No Bulletin Found, Try Another Date", announcement:"No Bulletin Found, Try Another Date", status:""}   
 }
 
 //  function test345t(){

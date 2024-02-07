@@ -16,6 +16,12 @@
     
 
     <style>
+        a:hover {
+          text-decoration: underline;
+        }
+        .not-clicked.unfocused.hide{
+          display:none;
+        }
         #announcementH1{
             text-align: left;
         }
@@ -242,7 +248,7 @@
             border-radius: 50px;
         }
         .Special-Menu-Container{
-          display: flex;
+          display: none;
           justify-content: right;
           flex-wrap:wrap-reverse;
         }
@@ -343,7 +349,7 @@
         }
         #calendar{
             font-family: 'Roboto', Arial, sans-serif;
-              max-height: 400px;
+              max-height: 515px;
             overflow-y: scroll;
           }
         }
@@ -446,6 +452,8 @@
             color: #D04100;
             font-family: Verdana, Geneva, sans-serif;
             font-size: 20px;
+            display: flex;
+            align-items: center;
         }
 
         .dining-menu-item {
@@ -471,6 +479,51 @@
                 margin: 0px;
             }
         }
+
+        #statusText{
+          border: 3px solid;
+          max-width: 350px;
+          min-width: 150px;
+          position: absolute;
+          background: white;
+          margin-top: 5px;
+          border-radius: 45px;
+          padding: 15px;
+          -webkit-user-select: none; /* Safari */
+          -ms-user-select: none; /* IE 10 and IE 11 */
+          user-select: none; /* Standard syntax */
+        }
+        #statusImg{
+          -webkit-user-select: none; /* Safari */
+          -ms-user-select: none; /* IE 10 and IE 11 */
+          user-select: none; /* Standard syntax */
+        }
+
+        .weather{
+          color: #000;
+          font-size: 16px;
+          margin-left: auto;
+          font-family: 'Roboto', Arial, sans-serif;
+          border: 1px solid #000;
+          border-radius: 100px;
+          padding-left: 10px;
+          padding-right: 10px;
+          padding-top: 2px;
+          padding-bottom: 2px;
+          background-color: #ffe6db;
+          align-items: center;
+          display: flex;
+        }
+        .temp{
+          font-weight:bold;
+          font-size:18px;
+          padding-right:5px;
+        }
+        .weather:has(.temp:empty){
+          display: none;
+        }
+                
+        
     </style>
 
     <style id="printImport">
@@ -531,39 +584,179 @@
     </style>
 </head>
 
-<body>
-    <? if (HasClassListAuth) { ?>
-      <div class="Special-Menu-Container">
-        <h4 class="button-panel mod">
-              <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://sites.google.com/isd391.org/cleveland-staff-site/class-lists">
-                  Class Lists 
-              </a>
-        </h4>
-        <? if (HasMailingListAuth) { ?>
+<body style="caret-color: transparent !important; max-width: 1280px; margin-left: auto;margin-right: auto;position: relative;">
+    <div style="display: flex;">
+      <img id="statusImg" style="height: 40px;display: inline;" src="">
+        
+      <? if (HasMailingListAuth) { ?>
+        <style>
+          .specialMenuButton{
+            display: flex;
+            flex-direction:column;
+            align-items:center;
+            margin-left:auto;
+            width: 28px;
+            padding: 5px;
+            margin-right: 7px;
+            -webkit-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none;
+            border-radius: 28px;
+            height: 28px;
+            justify-content: space-around;
+          }
+          .specialMenuButton:hover{
+            background-color:#ececec;
+            box-shadow: 0 0 6px #d04100 !important
+          }
+          .specialMenuButton>span{
+            background: #5b5b5b;
+            width: 5px;
+            border-radius: 5px;
+            display: block;
+            height: 5px;
+          }
+          .specialMenuButton>span:first-of-type
+          {
+            margin-top: 0px;
+          }
+          .Special-Menu-Container.collapsed{
+            z-index: 2;
+            position: absolute;
+            right: 10px;
+            background: #d78a8a;
+            border: 1px solid #6f6f6f;
+          }
+          .Special-Menu-Container.collapsed.show{
+            display: block !important;
+          }
+          .Special-Menu-Container.collapsed>.button-panel, .Special-Menu-Container.collapsed>.button-panel.mod{
+            box-shadow:none !important;
+            border-radius: 0;
+            margin: 0;
+            max-width: none;
+            padding-right: 30px;
+          }
+          .Special-Menu-Container.collapsed>.button-panel:hover{
+            background:#c4c4c4;
+          }
+        </style>
+        <script>
+          function toggleMenu(event){
+              event.stopPropagation();
+              let menu = document.getElementById("Special-Menu-Container");
+              let menuButton = document.getElementById("specialMenuButton");
+
+              if(menu.classList.contains("show")){
+                  menu.classList.remove("show");
+                  menuButton.classList.remove("open");
+                  window.removeEventListener('click', toggleMenu);
+              }
+              else{
+                  menu.classList.add("show");
+                  menuButton.classList.add("open");
+                  window.addEventListener('click', toggleMenu);
+              }
+          }
+        </script>
+        <div id="specialMenuButton" class="specialMenuButton" onclick="toggleMenu(event)">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div id="Special-Menu-Container" class="Special-Menu-Container collapsed">
+          <h4 class="button-panel mod">
+                <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://sites.google.com/isd391.org/cleveland-staff-site/class-lists">
+                    Class Lists 
+                </a>
+          </h4>
           <h4 class="button-panel mod">
               <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://sites.google.com/isd391.org/cleveland-staff-site/mailing-list">
                   Mailing List
               </a>
           </h4> 
-        <?}?>
 
-      <? if (IsMod) { ?>
+        <? if (IsMod) { ?>
+            <h4 class="button-panel mod">
+                <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://docs.google.com/spreadsheets/d/1ITgzDy-8jQq2Ss_P0UEWisbmvRJ7NL0oBoKv1p_Fdvs/edit">
+                    Edit Spreadsheet Data 
+                </a>
+            </h4>
+            <style>
+              .Special-Menu-Container{
+                justify-content: space-around !important;
+              }
+            </style>
+        <? }?>
+    </div>
+      <? } else if (HasClassListAuth) { ?>
+        <style>
+          .Special-Menu-Container.show{
+            display: flex !important;
+            margin-left: auto;
+          }
+        </style>
+        <div id="Special-Menu-Container" class="Special-Menu-Container show">
           <h4 class="button-panel mod">
-              <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://docs.google.com/spreadsheets/d/1ITgzDy-8jQq2Ss_P0UEWisbmvRJ7NL0oBoKv1p_Fdvs/edit">
-                  Edit Spreadsheet Data 
-                  <svg style="margin-top: auto; margin-bottom: auto; margin-left: 8px" ;="" width="22" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden"><defs><clipPath id="clip0"><path d="M427 250 446 250 446 267 427 267Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip1"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip2"><path d="M427 250 445 250 445 266 427 266Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip3"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip4"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath><clipPath id="clip5"><path d="M450.273 255.767 439.296 266.321 428.539 255.55 439.517 244.995Z" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs><g clip-path="url(#clip0)" transform="translate(-427 -250)"><g clip-path="url(#clip1)"><g clip-path="url(#clip2)"><g clip-path="url(#clip3)"><g clip-path="url(#clip4)"><g clip-path="url(#clip5)"><path d="M4.43998 5.70856 4.43998 3.80571 0.634285 7.61141C0.586713 7.61141 4.43998 11.417 4.43998 11.417L4.43998 9.51428 14.5885 7.61141 4.43998 5.70856Z" fill="#D04100" transform="matrix(-0.721125 0.693353 -0.69309 -0.720851 450.273 255.767)"></path></g></g></g><path d="M42.0677 26.2176 42.0677 39.2952" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 26.2176 51.2062 26.2176" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M41.0991 38.809 55.0465 38.809" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path><path d="M0 0-0.000101686-8.27331" stroke="#D04100" stroke-width="1.93713" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-1.01913 -0 -0 1 442.278 265.727)"></path><path d="M56.5514 39.5271 50.0123 39.5271" stroke="#D04100" stroke-width="0.603467" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1.01913 0 -0 1 385.587 226.393)"></path></g></g></g></svg>
-              </a>
+                <a role="button" target="_blank" style="display: flex;margin-top: auto;margin-bottom: auto;" href="https://sites.google.com/isd391.org/cleveland-staff-site/class-lists">
+                    Class Lists 
+                </a>
           </h4>
-          <style>
-            .Special-Menu-Container{
-              justify-content: space-around !important;
-            }
-          </style>
-      <? }?>
 
+        </div>
       </div>
 
-    <? }?>
+      <? } else {?>
+        </div>
+      <?}?>
+    <div id="statusText" class="not-clicked unfocused hide body-text">
+    </div>
+     <script>
+          let statusIcon = document.getElementById("statusImg");
+          let statusText = document.getElementById("statusText");
+          
+          statusIcon.addEventListener("mouseover", function () {
+            statusText.classList.remove("hide")
+          });
+          statusIcon.addEventListener("mouseout", async function () {
+            await sleep(300);
+            statusText.classList.add("hide")
+          });
+          statusIcon.addEventListener("click", toggleStatus);
+          statusText.addEventListener("mouseover", function () {
+            statusText.classList.remove("unfocused")
+          });
+          statusText.addEventListener("mouseout", function () {
+            statusText.classList.add("unfocused")
+          });
+          statusText.addEventListener("click", function () {
+              statusText.classList.remove("not-clicked");
+              window.addEventListener('click', toggleStatus);
+          });
+
+          function toggleStatus(event){
+            if(!statusText.contains(event.target)){
+              event.stopPropagation();
+              if(statusIcon.contains(event.target)){
+                if(statusText.classList.contains("not-clicked")){
+                  statusText.classList.remove("not-clicked");
+                  window.addEventListener('click', toggleStatus);
+                }
+                else{
+                    statusText.classList.add("not-clicked");
+                    statusText.classList.add("hide");
+                    window.removeEventListener('click', toggleStatus);
+                }
+              }
+              else {
+                statusText.classList.add("not-clicked");
+                window.removeEventListener('click', toggleStatus);
+              }
+            }
+          }
+
+      </script>
 
     <div class="top-bar flex-container">
         <div class="datepicker-container">
@@ -605,7 +798,7 @@
               <div class="dining-menu-flex-container">
                   <!--Start of Lunch Menu Items-->
                   <div id="mondayLunch" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Monday</div>
+                      <div class="dining-menu-day">Monday<div class="weather mon"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="mondayMenuLunch"></p>
                       </div>
@@ -613,7 +806,7 @@
                   <!--End of id=mondayLunch-->
 
                   <div id="tuesdayLunch" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Tuesday</div>
+                      <div class="dining-menu-day">Tuesday<div class="weather tue"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="tuesdayMenuLunch"></p>
                       </div>
@@ -621,7 +814,7 @@
                   <!--End of id=tuesdayLunch-->
 
                   <div id="wednesdayLunch" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Wednesday</div>
+                      <div class="dining-menu-day">Wednesday<div class="weather wed"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="wednesdayMenuLunch"></p>
                       </div>
@@ -629,7 +822,7 @@
                   <!--End of id=wednesdayLunch-->
 
                   <div id="thursdayLunch" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Thursday</div>
+                      <div class="dining-menu-day">Thursday<div class="weather thu"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="thursdayMenuLunch"></p>
                       </div>
@@ -637,7 +830,7 @@
                   <!--End of id=thursdayLunch-->
 
                   <div id="fridayLunch" class="dining-menu-flex-item dining-menu-friday">
-                      <div class="dining-menu-day">Friday</div>
+                      <div class="dining-menu-day">Friday<div class="weather fri"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="fridayMenuLunch"></p>
                       </div>
@@ -651,7 +844,7 @@
               <div class="dining-menu-flex-container">
                   <!--Start of Breakfast Menu Items-->
                   <div id="mondayBreakfast" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Monday</div>
+                      <div class="dining-menu-day">Monday<div class="weather mon"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="mondayMenuBreakfast"></p>
                       </div>
@@ -659,7 +852,7 @@
                   <!--End of id=mondayBreakfast-->
 
                   <div id="tuesdayBreakfast" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Tuesday</div>
+                      <div class="dining-menu-day">Tuesday<div class="weather tue"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="tuesdayMenuBreakfast"></p>
                       </div>
@@ -667,7 +860,7 @@
                   <!--End of id=tuesdayBreakfast-->
 
                   <div id="wednesdayBreakfast" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Wednesday</div>
+                      <div class="dining-menu-day">Wednesday<div class="weather wed"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="wednesdayMenuBreakfast"></p>
                       </div>
@@ -675,7 +868,7 @@
                   <!--End of id=wednesdayBreakfast-->
 
                   <div id="thursdayBreakfast" class="dining-menu-flex-item">
-                      <div class="dining-menu-day">Thursday</div>
+                      <div class="dining-menu-day">Thursday<div class="weather thu"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="thursdayMenuBreakfast"></p>
                       </div>
@@ -683,7 +876,7 @@
                   <!--End of id=thursdayBreakfast-->
 
                   <div id="fridayBreakfast" class="dining-menu-flex-item dining-menu-friday">
-                      <div class="dining-menu-day">Friday</div>
+                      <div class="dining-menu-day">Friday<div class="weather fri"><span class="temp"></span></div></div>
                       <div class="dining-menu-item">
                           <p id="fridayMenuBreakfast"></p>
                       </div>
@@ -758,6 +951,7 @@
                       xmlhttp.open("GET", nextWeekJson, true);
                       xmlhttp.send();
                   }
+                  updateWeatherDisplay();
               }
 
               function diningMenuOnMealSelect() {
@@ -772,6 +966,96 @@
                       document.getElementById("lunchMenu").style.display = "unset";
                   }
               }
+
+          </script>
+
+          <script>
+            const WEATHER_URL = "https://api.weather.gov/gridpoints/MPX/90,41/forecast";
+            const WEEK_DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]; 
+                        
+
+            let xmlhttpWeather = new XMLHttpRequest();
+
+            let weatherJSON = {
+                thisWeek:{
+                  mon:{date:null, temp:null, unit:null, short:null, long:null},
+                  tue:{date:null, temp:null, unit:null, short:null, long:null},
+                  wed:{date:null, temp:null, unit:null, short:null, long:null},
+                  thu:{date:null, temp:null, unit:null, short:null, long:null},
+                  fri:{date:null, temp:null, unit:null, short:null, long:null},
+                  sat:{date:null, temp:null, unit:null, short:null, long:null},
+                  sun:{date:null, temp:null, unit:null, short:null, long:null}
+                },
+                nextWeek:{
+                  mon:{date:null, temp:null, unit:null, short:null, long:null},
+                  tue:{date:null, temp:null, unit:null, short:null, long:null},
+                  wed:{date:null, temp:null, unit:null, short:null, long:null},
+                  thu:{date:null, temp:null, unit:null, short:null, long:null},
+                  fri:{date:null, temp:null, unit:null, short:null, long:null},
+                  sat:{date:null, temp:null, unit:null, short:null, long:null},
+                  sun:{date:null, temp:null, unit:null, short:null, long:null}    
+                }
+              };
+
+            let week = "thisWeek";
+
+            xmlhttpWeather.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                var forecast = JSON.parse(this.responseText);
+                forecast = forecast.properties.periods;
+              
+                for(var i = 0; i<forecast.length; i++){
+                  if(forecast[i].isDaytime){
+                    let date = new Date(forecast[i].startTime);
+                    let day = date.getDay();
+                    
+                    let dayJSON = weatherJSON[week][WEEK_DAYS[day]];
+                    
+                    dayJSON.date = date.getTime();
+                    dayJSON.temp = forecast[i].temperature
+                    dayJSON.unit = forecast[i].temperatureUnit
+                    dayJSON.short = forecast[i].shortForecast
+                    dayJSON.long = forecast[i].name + ":<br>" + forecast[i].detailedForecast +"<br><br>" +forecast[i+1].name + ":<br>" + forecast[i+1].detailedForecast
+                    
+                    if(day == 0){
+                      week = "nextWeek";
+                    }
+                  }  
+                }
+                updateWeatherDisplay();
+              }
+            };
+
+
+            xmlhttpWeather.open("GET", WEATHER_URL, true);
+
+            function refreshWeather(){
+              xmlhttpWeather.send();
+            };
+
+            function updateWeatherDisplay(){
+              let json;
+              if(document.getElementById("diningSelect1").value == 0){
+                json = weatherJSON.thisWeek;		
+              }
+              else{
+                json = weatherJSON.nextWeek;		
+              }
+              Object.entries(json).forEach(([key, value])=>{
+                    document.querySelectorAll(".weather."+key).forEach((element)=>{
+                        let span = element.getElementsByClassName("temp")[0]
+                        element.innerHTML = "";
+                        element.appendChild(span);
+                        span.innerText = "";
+                        if(value.date != null){
+                          span.innerText = value.temp + "°" + value.unit;
+                          element.innerHTML += value.short;
+                        }
+                    })
+      
+                })
+            }
+            refreshWeather();
 
           </script>
 
@@ -874,7 +1158,7 @@
                 if(dateText[0] == "0"){
                     this.value = this.value.slice(1);
                 }
-                loadBulletin(this.value)
+                loadBulletinWithLoaderWheel(this.value)
             }
         })
     });
@@ -886,24 +1170,50 @@
         document.getElementById("bulletinContainer").style.display = "none";
         document.getElementById("loader-container").style.display = "block";
         await sleep(500);
-        loadBulletin(document.getElementById("datepicker").value);
+        loadBulletinWithLoaderWheel(document.getElementById("datepicker").value);
+        refreshWeather();
 
     }
+    async function silentRefreshBulletin(){
+        loadBulletin(document.getElementById("datepicker").value);
+        calendar.refetchEvents();
+        refreshWeather();
+    }
 
+    function loadBulletinWithLoaderWheel(dateStr){
+      document.getElementById("bulletinContainer").style.display = "none";
+      document.getElementById("loader-container").style.display = "block";
+      loadBulletin(dateStr);
+      changeCalView(dateStr);
+    }
+    
     function loadBulletin(dateStr){
-        document.getElementById("bulletinContainer").style.display = "none";
-        document.getElementById("loader-container").style.display = "block";
-
         var onResponse = async function(response){
             document.getElementById("bDayText").innerHTML = response.birthday;
             document.getElementById("staffOutText").innerHTML = response.staffOut;
             document.getElementById("announcementText").innerHTML = response.announcement;
             document.getElementById("bulletinContainer").style.display = "";
             document.getElementById("loader-container").style.display = "none";
+                         
+            let status = document.getElementById("statusText");
+            if(response.status == "" || response.fixed){
+              status.style.borderColor = "#70AD47";
+              status.innerHTML = "<b>Status:</b> <br>No known issues. <a target='_blank' href='https://portal.isd391.org/SSO/ForwardTo?szURL=https://ticket.isd391.org/login.php?do=ext~bk=oauth2.user.p2i3'>Click here to report an issue.</a>";
+              if(response.status != ""){
+                status.innerHTML += "<br><br>" + response.status;
+              }
+              document.getElementById("statusImg").src = "data:image/png;base64,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";
+            }
+            else{
+              status.style.borderColor = "rgb(238, 238, 0)";
+              status.innerHTML = "<b>Status:</b> <br>" + response.status;
+              document.getElementById("statusImg").src = "data:image/png;base64,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";
+            }
+
             await sleep(100);
             let  staffHeight = document.getElementById("staffOutText").offsetHeight; 
-            if (staffHeight < 400){
-              staffHeight = 400
+            if (staffHeight < 515){
+              staffHeight = 515
             }
             document.getElementById("calendar").style.maxHeight = staffHeight+"px";
 
@@ -912,8 +1222,6 @@
         //else
         console.log("Fetching page")
         google.script.run.withSuccessHandler(onResponse).getJsonData(dateStr);
-
-        changeCalView(dateStr);
     }
       
 
@@ -1226,13 +1534,8 @@
     }
 
     async function changeCalView(dateStr){
-
-        var start = new Date();
-        start.setHours(0,0,0,0);
         var dateArr = dateStr.split("/");
-        start.setMonth(dateArr[0] - 1);
-        start.setDate(dateArr[1]);
-        start.setFullYear(dateArr[2]);
+        var start = new Date(dateArr[2], dateArr[0] - 1, dateArr[1],0,0,0,0);
 
         var oneWeek = new Date(start.getTime() + NUM_DAYS_TO_SHOW_CAL*24*60*60*1000);
         calendar.changeView('customList', {start:start, end:oneWeek});
@@ -1243,7 +1546,7 @@
     var dateStr = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
     document.getElementById("datepicker").value = dateStr;
     try{loadCalendar();}catch(e){console.warn(e)}
-    loadBulletin(dateStr);
+    loadBulletinWithLoaderWheel(dateStr);
 
 </script>
 
@@ -1291,6 +1594,7 @@
                 'tr { border:1px solid #ececec; }'+
                 'a {color:black !important; text-decoration:none !important}'+
                 '.Special-Menu-Container{display:none !important;}'+
+                '.Special-Menu-Container.show{display:none !important;}'+
 
 
             '</style>'+
@@ -1319,7 +1623,7 @@
     }
 </script>
 <script>
-  setInterval(refreshBulletin, 300000) //300,000ms = 5min;
+  setInterval(silentRefreshBulletin, 300000) //300,000ms = 5min;
 </script>
 
 </html>

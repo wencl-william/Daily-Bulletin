@@ -14,8 +14,8 @@ function onEdit(){
 function cacheWeek() {
   var Cache = {};
   /* Previous Day */
-  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Archived_Bulletins").getRange(3,1,1,4).getDisplayValues();
-  var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3]}
+  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Archived_Bulletins").getRange(3,1,1,6).getDisplayValues();
+  var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3], status:values[0][4], fixed:false}
   if(rowData.staffOut == ""){
     rowData.staffOut = "No Staff Out Today";
   }
@@ -67,12 +67,46 @@ function cacheWeek() {
 
   }
 
+  if(rowData.status == "" && values[0][5] != ""){
+    rowData.fixed = true;
+    rowData.status = values[0][5];
+  }
+  else if(values[0][5] != ""){
+    rowData.status += " <br><br>"+values[0][5];
+  }
+
+  let http = rowData.status.search("https://");
+  let newString = "";
+
+  while(http != -1){
+    newString += rowData.status.slice(0,http);
+    rowData.status = rowData.status.slice(http, rowData.status.length);
+
+    newString += '<a href="';
+    let space = rowData.status.search(/\s/);
+    if(space == -1){
+      newString = newString + rowData.status + '" target="_blank">Learn more.</a>';
+      rowData.status = "";
+    }
+    else{
+      let url = rowData.status.slice(0,space);
+      rowData.status = rowData.status.slice(space, rowData.status.length);
+
+      newString += url + '" target="_blank">Learn more.</a>';
+    }
+
+    http = rowData.status.search("https://");
+  }
+  newString += rowData.status;
+
+  rowData.status = newString;
+
   Cache[Date.parse(rowData.date)] = JSON.stringify(rowData);
   
   /* Next 7 days */
-  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Bulletin_Data").getRange(3,1,6,4).getDisplayValues();
+  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Bulletin_Data").getRange(3,1,6,6).getDisplayValues();
   for(var i=0; i<values.length; i++){
-    var rowData = {date:values[i][0], staffOut:values[i][1], birthday:values[i][2], announcement:values[i][3]}
+    var rowData = {date:values[i][0], staffOut:values[i][1], birthday:values[i][2], announcement:values[i][3], status:values[i][4], fixed:false}
     if(rowData.staffOut == ""){
       rowData.staffOut = "No Staff Out Today";
     }
@@ -123,6 +157,41 @@ function cacheWeek() {
       }
 
     }
+
+    if(rowData.status == "" && values[i][5] != ""){
+      rowData.fixed = true;
+      rowData.status = values[i][5];
+    }
+    else if(values[i][5] != ""){
+      rowData.status = rowData.status + " <br><br>"+values[i][5];
+    }
+
+
+    http = rowData.status.search("https://");
+    newString = "";
+
+    while(http != -1){
+      newString += rowData.status.slice(0,http);
+      rowData.status = rowData.status.slice(http, rowData.status.length);
+
+      newString += '<a href="';
+      let space = rowData.status.search(/\s/);
+      if(space == -1){
+        newString = newString + rowData.status + '" target="_blank">Learn more</a>';
+        rowData.status = "";
+      }
+      else{
+        let url = rowData.status.slice(0,space);
+        rowData.status = rowData.status.slice(space, rowData.status.length);
+
+        newString += url + '" target="_blank">Learn more</a>';
+      }
+
+      http = rowData.status.search("https://");
+    }
+    newString += rowData.status;
+
+    rowData.status = newString;
 
     Cache[Date.parse(rowData.date)] = JSON.stringify(rowData);
   }
