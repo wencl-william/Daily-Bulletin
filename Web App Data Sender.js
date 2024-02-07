@@ -166,8 +166,8 @@ function getRowFromSheet_(dateStr, sheetName){
   var columnValues = sheet.getRange(3, column, sheet.getLastRow(),1).getDisplayValues(); //1st & 2nd rows are header
   for(var i=0; i< columnValues.length; i++){
     if(columnValues[i][0] == dateStr){
-        var values = sheet.getRange(i + 3, 1,1,6).getDisplayValues();
-        var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3], status:values[0][4], fixed:false}
+        var values = sheet.getRange(i + 3, 1,1,7).getDisplayValues();
+        var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3], status:values[0][4], fixed:false, maintenace:false}
 
         if(rowData.staffOut == ""){
           rowData.staffOut = "No Staff Out Today";
@@ -185,12 +185,27 @@ function getRowFromSheet_(dateStr, sheetName){
           rowData.announcement = "No Anouncements Today"
         }
 
-        if(rowData.status == "" && values[0][5] != ""){
-          rowData.fixed = true;
-          rowData.status = values[0][5];
+        if(rowData.status == ""){
+          if(values[0][6] != "" && values[0][5] != ""){
+            rowData.maintenance = true;
+            rowData.status = values[0][6]+ " <br><br>"+values[0][5];
+          }
+          else if(values[0][6] != ""){
+            rowData.maintenance = true;
+            rowData.status = values[0][6];
+          }
+          else if(values[0][5] != ""){
+            rowData.fixed = true;
+            rowData.status = values[0][5];
+          }
         }
-        else if(values[0][5] != ""){
-          rowData.status += " <br><br>"+values[0][5];
+        else{
+          if(values[0][6] != ""){
+            rowData.status += " <br><br>"+values[0][6];
+          }
+          if(values[0][5] != ""){
+            rowData.status += " <br><br>"+values[0][5];
+          }
         }
 
         let http = rowData.status.search("https://");

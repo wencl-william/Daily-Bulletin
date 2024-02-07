@@ -14,8 +14,8 @@ function onEdit(){
 function cacheWeek() {
   var Cache = {};
   /* Previous Day */
-  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Archived_Bulletins").getRange(3,1,1,6).getDisplayValues();
-  var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3], status:values[0][4], fixed:false}
+  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Archived_Bulletins").getRange(3,1,1,7).getDisplayValues();
+  var rowData = {date:values[0][0], staffOut:values[0][1], birthday:values[0][2], announcement:values[0][3], status:values[0][4], fixed:false, maintenance:false}
   if(rowData.staffOut == ""){
     rowData.staffOut = "No Staff Out Today";
   }
@@ -67,12 +67,27 @@ function cacheWeek() {
 
   }
 
-  if(rowData.status == "" && values[0][5] != ""){
-    rowData.fixed = true;
-    rowData.status = values[0][5];
+  if(rowData.status == ""){
+    if(values[0][6] != "" && values[0][5] != ""){
+      rowData.maintenance = true;
+      rowData.status = values[0][6]+ " <br><br>"+values[0][5];
+    }
+    else if(values[0][6] != ""){
+      rowData.maintenance = true;
+      rowData.status = values[0][6];
+    }
+    else if(values[0][5] != ""){
+      rowData.fixed = true;
+      rowData.status = values[0][5];
+    }
   }
-  else if(values[0][5] != ""){
-    rowData.status += " <br><br>"+values[0][5];
+  else{
+    if(values[0][6] != ""){
+      rowData.status += " <br><br>"+values[0][6];
+    }
+    if(values[0][5] != ""){
+      rowData.status += " <br><br>"+values[0][5];
+    }
   }
 
   let http = rowData.status.search("https://");
@@ -104,9 +119,9 @@ function cacheWeek() {
   Cache[Date.parse(rowData.date)] = JSON.stringify(rowData);
   
   /* Next 7 days */
-  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Bulletin_Data").getRange(3,1,6,6).getDisplayValues();
+  var values = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Bulletin_Data").getRange(3,1,6,7).getDisplayValues();
   for(var i=0; i<values.length; i++){
-    var rowData = {date:values[i][0], staffOut:values[i][1], birthday:values[i][2], announcement:values[i][3], status:values[i][4], fixed:false}
+    var rowData = {date:values[i][0], staffOut:values[i][1], birthday:values[i][2], announcement:values[i][3], status:values[i][4], fixed:false, maintenance:false}
     if(rowData.staffOut == ""){
       rowData.staffOut = "No Staff Out Today";
     }
@@ -158,13 +173,28 @@ function cacheWeek() {
 
     }
 
-    if(rowData.status == "" && values[i][5] != ""){
+   if(rowData.status == ""){
+    if(values[i][6] != "" && values[i][5] != ""){
+      rowData.maintenance = true;
+      rowData.status = values[i][6]+ " <br><br>"+values[i][5];
+    }
+    else if(values[i][6] != ""){
+      rowData.maintenance = true;
+      rowData.status = values[i][6];
+    }
+    else if(values[i][5] != ""){
       rowData.fixed = true;
       rowData.status = values[i][5];
     }
-    else if(values[i][5] != ""){
-      rowData.status = rowData.status + " <br><br>"+values[i][5];
+  }
+  else{
+    if(values[0][6] != ""){
+      rowData.status += " <br><br>"+values[0][6];
     }
+    if(values[0][5] != ""){
+      rowData.status += " <br><br>"+values[0][5];
+    }
+  }
 
 
     http = rowData.status.search("https://");
