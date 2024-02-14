@@ -1,0 +1,337 @@
+<script>
+
+function noaaIconToClass(iconUrl) {
+  let iconData = {time:null, code:null, secondaryCode:null};
+
+  let land = iconUrl.indexOf("land");
+  if(land == -1){
+    return null;
+  }
+  iconUrl = iconUrl.slice(land+5);
+
+  let slash = iconUrl.indexOf("/");
+  iconData.time = iconUrl.slice(0,slash);
+  iconUrl = iconUrl.slice(slash+1);
+
+  let question = iconUrl.indexOf("?");
+  iconUrl = iconUrl.slice(0,question);
+
+  let comma = iconUrl.indexOf(",");
+  slash = iconUrl.indexOf("/");
+
+  if(comma == -1){
+    if(slash != -1){
+      iconData.code = iconUrl.slice(0, slash);
+      iconData.secondaryCode = iconUrl.slice(slash+1);
+    }
+    else{
+      iconData.code = iconUrl;
+    }
+  }
+  else{
+    if(slash == -1){
+      iconData.code = iconUrl.slice(0, comma);
+    }
+    else if(slash < comma){
+      iconData.code = iconUrl.slice(0, slash);
+      iconData.secondaryCode = iconUrl.slice(slash+1,comma);
+    }
+    else{
+      iconData.code = iconUrl.slice(0, comma);
+      iconData.secondaryCode = iconUrl.slice(slash+1);
+    }
+
+  }
+
+  //Match Icons Now
+
+  let weatherClass = "wi-na";
+
+  if (iconData.time == 'day'){
+    switch (iconData.code){
+      case 'skc': weatherClass = 'wi-day-sunny'; break;
+      case 'few': weatherClass = 'wi-day-sunny-overcast'; break;
+      case 'sct': weatherClass = 'wi-day-cloudy'; break;
+      case 'bkn': weatherClass = 'wi-cloud'; break;
+      case 'ovc': weatherClass = 'wi-cloudy'; break;
+      case 'wind_skc': weatherClass = 'wi-day-windy'; break;
+      case 'wind_few': weatherClass = 'wi-day-windy'; break;
+      case 'wind_sct': weatherClass = 'wi-day-cloudy-gusts'; break;
+      case 'wind_bkn': weatherClass = 'wi-cloudy-gusts'; break;
+      case 'wind_ovc': weatherClass = 'wi-cloudy'; break;
+      case 'snow': weatherClass = 'wi-day-snow'; break;
+      case 'rain_snow': weatherClass = 'wi-day-rain-mix'; break;
+      case 'rain_sleet': weatherClass = 'wi-day-rain-mix'; break;
+      case 'fzra': weatherClass = 'wi-day-sleet'; break;
+      case 'rain_fzra': weatherClass = 'wi-day-rain-mix'; break;
+      case 'snow_fzra': weatherClass = 'wi-day-rain-mix'; break;
+      case 'sleet': weatherClass = 'wi-day-sleet'; break;
+      case 'rain': weatherClass = 'wi-rain'; break;
+      case 'rain_showers': weatherClass = 'wi-rain'; break;
+      case 'rain_showers_hi': weatherClass = 'wi-day-rain'; break;
+      case 'tsra': weatherClass = 'wi-thunderstorm'; break;
+      case 'tsra_sct': weatherClass = 'wi-storm-showers'; break;
+      case 'tsra_hi': weatherClass = 'wi-day-thunderstorm'; break;
+      case 'tornado': weatherClass = 'wi-tornado'; break;
+      case 'dust': weatherClass = 'wi-dust'; break;
+      case 'smoke': weatherClass = 'wi-smoke'; break;
+      case 'haze': weatherClass = 'wi-day-haze'; break;
+      case 'hot': weatherClass = 'wi-hot'; break;
+      case 'cold': weatherClass = 'wi-thermometer-exterior'; break;
+      case 'blizzard': weatherClass = 'wi-snow-wind'; break;
+      case 'fog': weatherClass = 'wi-fog'; break;
+    }
+  }
+  else if(iconData.time == 'night'){
+    switch (iconData.code){
+      case 'skc': weatherClass = 'wi-night-clear'; break;
+      case 'few': weatherClass = 'wi-night-alt-cloudy'; break;
+      case 'sct': weatherClass = 'wi-night-cloudy'; break;
+      case 'bkn': weatherClass = 'wi-cloud'; break;
+      case 'ovc': weatherClass = 'wi-cloudy'; break;
+      case 'wind_skc': weatherClass = 'wi-strong-wind'; break;
+      case 'wind_few': weatherClass = 'wi-strong-wind'; break;
+      case 'wind_sct': weatherClass = 'wi-night-alt-cloudy-gusts'; break;
+      case 'wind_bkn': weatherClass = 'wi-cloudy-gusts'; break;
+      case 'wind_ovc': weatherClass = 'wi-cloudy'; break;
+      case 'snow': weatherClass = 'wi-night-alt-snow'; break;
+      case 'rain_snow': weatherClass = 'wi-night-alt-rain-mix'; break;
+      case 'rain_sleet': weatherClass = 'wi-night-alt-rain-mix'; break;
+      case 'fzra': weatherClass = 'wi-night-alt-sleet'; break;
+      case 'rain_fzra': weatherClass = 'wi-night-alt-rain-mix'; break;
+      case 'snow_fzra': weatherClass = 'wi-night-alt-rain-mix'; break;
+      case 'sleet': weatherClass = 'wi-night-alt-sleet'; break;
+      case 'rain': weatherClass = 'wi-rain'; break;
+      case 'rain_showers': weatherClass = 'wi-rain'; break;
+      case 'rain_showers_hi': weatherClass = 'wi-night-alt-rain'; break;
+      case 'tsra': weatherClass = 'wi-thunderstorm'; break;
+      case 'tsra_sct': weatherClass = 'wi-storm-showers'; break;
+      case 'tsra_hi': weatherClass = 'wi-night-alt-thunderstorm'; break;
+      case 'tornado': weatherClass = 'wi-tornado'; break;
+      case 'dust': weatherClass = 'wi-dust'; break;
+      case 'smoke': weatherClass = 'wi-smoke'; break;
+      case 'hot': weatherClass = 'wi-hot'; break;
+      case 'cold': weatherClass = 'wi-thermometer-exterior'; break;
+      case 'blizzard': weatherClass = 'wi-snow-wind'; break;
+      case 'fog': weatherClass = 'wi-fog'; break;
+    }
+  }
+
+
+    return weatherClass;
+}
+
+
+
+
+
+
+
+
+const WEATHER_FORECAST_URL = "https://api.weather.gov/gridpoints/MPX/90,41/forecast";
+const WEATHER_CURRENT_URL = "https://api.weather.gov/stations/KMKT/observations/latest";
+
+
+//setup forecast templates
+let forecastElements = [];
+let forecastBox= document.getElementById("forecastContainer");
+
+for(let i = 0; i<7; i++){
+  let elements = {};
+
+  let mainDiv = document.createElement("div");
+  mainDiv.classList.add("weather","forecast","tile");
+  
+  let tempCont = document.createElement("div");
+  tempCont.classList.add("temp-containter");
+  elements.hiTemp = document.createElement("span");
+  elements.hiTemp.classList.add("temp","hi");
+  let slash = document.createElement("span");
+  slash.innerText = " / ";
+  elements.lowTemp = document.createElement("span");
+  elements.lowTemp.classList.add("temp","low");
+  tempCont.appendChild(elements.hiTemp);
+  tempCont.appendChild(slash);
+  tempCont.appendChild(elements.lowTemp);
+  mainDiv.appendChild(tempCont);
+
+  elements.icon = document.createElement("i");
+  elements.icon.classList.add("wi","forecast");
+  mainDiv.appendChild(elements.icon);
+
+  elements.precip = document.createElement("div");
+  elements.precip.classList.add("precip");
+  mainDiv.appendChild(elements.precip);
+
+  spacer = document.createElement("div");
+  spacer.classList.add("spacer");
+  mainDiv.appendChild(spacer);
+
+  elements.short = document.createElement("div");
+  elements.short.classList.add("short-forecast");
+  mainDiv.appendChild(elements.short);
+
+  elements.day = document.createElement("div");
+  elements.day.classList.add("weekday");
+  mainDiv.appendChild(elements.day);
+
+  forecastBox.appendChild(mainDiv);
+
+  forecastElements.push(elements);
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let xmlhttpWeatherForecast = new XMLHttpRequest();
+
+xmlhttpWeatherForecast.onreadystatechange = function () {
+  if (this.readyState == 4 && this.status == 200) {
+    var forecast = JSON.parse(this.responseText);
+    forecast = forecast.properties.periods;
+   
+    let elementIndex = 0;
+
+    let i = 0;
+    if(!forecast[0].isDaytime){
+      forecastElements[elementIndex].day.innerText = "Tonight"
+      forecastElements[elementIndex].hiTemp.innerText = '-';
+      forecastElements[elementIndex].lowTemp.innerText = forecast[0].temperature;
+
+      let thenIndex = forecast[0].shortForecast.indexOf("then");
+      if(thenIndex != -1){
+        forecast[0].shortForecast = forecast[0].shortForecast.slice(0, thenIndex);
+      }
+      forecastElements[elementIndex].short.innerText = forecast[0].shortForecast;
+      forecastElements[elementIndex].icon.classList.add(noaaIconToClass(forecast[0].icon));
+
+      if(forecast[0].probabilityOfPrecipitation.value){
+        forecastElements[elementIndex].precip.innerText = forecast[0].probabilityOfPrecipitation.value + "%";
+      }
+
+      i = 1;
+      elementIndex++;
+    }
+    for(;i<forecast.length; i++){
+      if(forecast[i].isDaytime){
+        let date = new Date(forecast[i].startTime);
+
+        forecastElements[elementIndex].day.innerText = date.toLocaleString('en-US', { weekday: 'short' });
+        forecastElements[elementIndex].hiTemp.innerText = forecast[i].temperature;
+        forecastElements[elementIndex].lowTemp.innerText = forecast[i+1].temperature;
+
+        let thenIndex = forecast[i].shortForecast.indexOf("then");
+        if(thenIndex != -1){
+          forecast[i].shortForecast = forecast[i].shortForecast.slice(0, thenIndex);
+        }
+        forecastElements[elementIndex].short.innerText = forecast[i].shortForecast;
+        forecastElements[elementIndex].icon.classList.add(noaaIconToClass(forecast[i].icon));
+
+        if(forecast[i].probabilityOfPrecipitation.value){
+          forecastElements[elementIndex].precip.innerText = forecast[i].probabilityOfPrecipitation.value + "%";
+        }
+
+        elementIndex++;
+      }  
+    }
+  }
+};
+
+
+let xmlhttpWeatherCurrent = new XMLHttpRequest();
+
+xmlhttpWeatherCurrent.onreadystatechange = function () {
+  if (this.readyState == 4 && this.status == 200) {
+    var current = JSON.parse(this.responseText);
+    current = current.properties;
+    let temp;
+    if(current.temperature.unitCode == "wmoUnit:degC"){
+      temp = celsiusToFahrenheit(current.temperature.value)
+    }
+    else{
+      temp = current.temperature.value
+    }
+
+    temp = Math.round(temp);
+
+    document.getElementById("currentTemp").innerText = temp + "°F";
+
+    let icon = noaaIconToClass(current.icon);
+    document.getElementById("currentTempIcon").classList.add(icon);
+    
+  }
+};
+
+function celsiusToFahrenheit(tempCelsius){
+  return (tempCelsius * (9/5)) + 32;
+}
+
+function updateWeather(){
+  xmlhttpWeatherForecast.open("GET", WEATHER_FORECAST_URL, true);
+  xmlhttpWeatherForecast.send();
+
+  xmlhttpWeatherCurrent.open("GET", WEATHER_CURRENT_URL, true);
+  xmlhttpWeatherCurrent.send();
+}
+
+updateWeather();
+
+
+
+
+let currentWeather = document.getElementById("weatherContainer");
+
+currentWeather.addEventListener("mouseover", function () {
+  forecastBox.classList.remove("hide")
+});
+currentWeather.addEventListener("mouseleave", async function () {
+  forecastBox.classList.add("hide")
+});
+currentWeather.addEventListener("click", toggleWeatherStatus);
+
+forecastBox.addEventListener("click", function () {
+    forecastBox.classList.remove("not-clicked");
+    window.addEventListener('click', toggleWeatherStatus);
+});
+
+function toggleWeatherStatus(event){
+  if(!forecastBox.contains(event.target)){
+    event.stopPropagation();
+    if(currentWeather.contains(event.target)){
+      if(forecastBox.classList.contains("not-clicked")){
+        forecastBox.classList.remove("not-clicked");
+        window.addEventListener('click', toggleWeatherStatus);
+      }
+      else{
+          forecastBox.classList.add("not-clicked");
+          forecastBox.classList.add("hide");
+          window.removeEventListener('click', toggleWeatherStatus);
+      }
+    }
+    else {
+      forecastBox.classList.add("not-clicked");
+      window.removeEventListener('click', toggleWeatherStatus);
+    }
+  }
+}
+
+</script>
