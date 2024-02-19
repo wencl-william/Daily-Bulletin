@@ -130,11 +130,15 @@ function noaaIconToClass(iconUrl) {
 
 const WEATHER_FORECAST_URL = "https://api.weather.gov/gridpoints/MPX/90,41/forecast";
 const WEATHER_CURRENT_URL = "https://api.weather.gov/stations/KMKT/observations/latest";
+const WEATHER_ALERT_URL = "https://api.weather.gov/alerts/active/zone/MNC079";
 
 
 //setup forecast templates
 let forecastElements = [];
 let forecastBox= document.getElementById("forecastContainer");
+let forecastTemps= document.getElementById("forecastTemps");
+let forecastAlerts = document.getElementById("forecastAlerts");
+
 
 for(let i = 0; i<7; i++){
   let elements = {};
@@ -174,8 +178,9 @@ for(let i = 0; i<7; i++){
   elements.day = document.createElement("div");
   elements.day.classList.add("weekday");
   mainDiv.appendChild(elements.day);
+  elements.main = mainDiv;
 
-  forecastBox.appendChild(mainDiv);
+  forecastTemps.appendChild(mainDiv);
 
   forecastElements.push(elements);
 } 
@@ -285,12 +290,80 @@ function celsiusToFahrenheit(tempCelsius){
   return (tempCelsius * (9/5)) + 32;
 }
 
+
+let xmlhttpWeatherAlert = new XMLHttpRequest();
+
+xmlhttpWeatherAlert.onreadystatechange = function () {
+  if (this.readyState == 4 && this.status == 200) {
+    var alerts = JSON.parse(this.responseText);
+    forecastAlerts.innerHTML = "";
+
+    alerts = alerts.features;
+    
+    let today = new Date();
+    today.setHours(0,0,0,0);
+
+    for(let i = 0; i<alerts.length; i++){
+      let alertStartDate = new Date(Date.parse(alerts[i].properties.effective));
+      alertStartDate.setHours(0,0,0,0);
+      console.log(alertStartDate)
+
+      let alertEndDate = new Date(Date.parse(alerts[i].properties.ends));
+      alertEndDate.setHours(0,0,0,0);
+      console.log(alertEndDate)
+
+
+      let startDayIndex = alertStartDate.getTime() - today.getTime();//in milliseconds
+      console.log(startDayIndex);
+
+      startDayIndex = startDayIndex/(24*60*60*1000) //converted to days.
+      console.log(startDayIndex);
+
+      if(startDayIndex < 0){ startDayIndex = 0};
+
+      let endDayIndex = alertEndDate.getTime() - today.getTime();//in milliseconds
+      endDayIndex = endDayIndex/(24*60*60*1000) //converted to days.
+
+      console.log(startDayIndex);
+      console.log(endDayIndex);
+      if(endDayIndex < 0 || endDayIndex < startDayIndex){continue;};
+
+      for(let elementIndex = startDayIndex; elementIndex <= endDayIndex; elementIndex++){
+        forecastElements[elementIndex].main.classList.add("alert");
+      }
+
+      let alertDiv = document.createElement("div");
+      let title = document.createElement("h1");
+      let info = document.createElement("p");
+      alertDiv.classList.add("long-alert");
+      
+      title.innerHTML = alerts[i].properties.event;
+
+      let description = alerts[i].properties.description;
+      description = description.replaceAll(/(?<!\n)\n(?!\n)/g, ' ');
+      info.innerHTML = description;
+
+      alertDiv.appendChild(title);
+      alertDiv.appendChild(info);
+      forecastAlerts.appendChild(alertDiv);
+
+    }
+  }
+}
+
+
 function updateWeather(){
+  for(let elementIndex = 0; elementIndex < forecastElements.length; elementIndex++){
+    forecastElements[elementIndex].main.classList.remove("alert");
+  }
+  xmlhttpWeatherCurrent.open("GET", WEATHER_CURRENT_URL, true);
+  xmlhttpWeatherCurrent.send();
+
   xmlhttpWeatherForecast.open("GET", WEATHER_FORECAST_URL, true);
   xmlhttpWeatherForecast.send();
 
-  xmlhttpWeatherCurrent.open("GET", WEATHER_CURRENT_URL, true);
-  xmlhttpWeatherCurrent.send();
+  xmlhttpWeatherAlert.open("GET", WEATHER_ALERT_URL, true);
+  xmlhttpWeatherAlert.send();
 }
 
 updateWeather();

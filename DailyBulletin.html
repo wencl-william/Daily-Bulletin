@@ -16,6 +16,10 @@
     
 
     <style>
+
+      #ui-datepicker-div{
+        left: 19px !important;
+      }
         a:hover {
           text-decoration: underline;
         }
@@ -43,6 +47,7 @@
         }
         body{
             padding-top: 16px;
+            padding:3px;
         }
         h1, .h1{
             color: #D04100; 
@@ -740,7 +745,7 @@
         right: -107px;
         top:-5px;
         padding:8px;
-        border-radius:25px 25px 0px 0px;
+        border-radius:15px 15px 0px 0px;
         line-height:.7;
         background-color: #ececec;
         border: 1px solid #b8b8b8
@@ -774,6 +779,20 @@
         display:inline;
         font-size:20px;
       }
+      .weather.alert{
+        box-shadow: 0 0 5px 3px #d00000 !important;
+      }
+       #forecastTemps::has(.weather.alert){
+        column-gap:10px;
+      } 
+      #forecastTemps{
+        display: flex;
+        padding: 13px;
+        padding-bottom:0px;
+        column-gap: 5px;
+        row-gap: 5px;
+        line-height: normal;
+      }
       .weather.forecastWindow{
         background: #ececec;
         position: absolute;
@@ -781,13 +800,14 @@
         border: 1px solid #b8b8b8;
         border-radius: 15px;
         display: flex;
-        padding: 13px;
+        /* padding: 13px; */
         padding-bottom:25px;
-        column-gap: 5px;
+        /* column-gap: 5px; */
         row-gap: 5px;
         line-height: normal;
         z-index: 5;
         max-width:90vw;
+        flex-direction: column;
       }
       .weather.forecastWindow::after {
         content: "Current weather & forecast data is provided by the National Weather Service";
@@ -850,6 +870,32 @@
       .weather .spacer{
         flex-grow: 1;
       }
+      #forecastAlerts{
+        text-align: left;
+        padding-left:13px;
+        padding-right:13px;
+        padding-top:0px;
+        padding-bottom:0px;
+      }
+      .long-alert h1{
+        font-size:20px;
+        font-family:inherit;
+        margin-bottom:5px;
+        text-align:left;
+        color:#d00000;
+      }
+      .long-alert{
+        padding:5px;
+        border:2px solid #d00000;
+        border-radius: 15px;
+        margin-top:5px;
+      }
+      .long-alert p {
+        margin:0px;
+        padding-left:12px;
+        line-height:1;
+
+      }
       @media (min-width:600px){
         .weather.forecastWindow {
           left: -235px;
@@ -872,8 +918,10 @@
       }
       @media (max-width:810px){
         .weather.forecastWindow {
-          flex-wrap:wrap;
           width:90vw;
+        }
+        #forecastTemps{
+          flex-wrap:wrap;
         }
       }
       @media (max-width:640px){
@@ -895,7 +943,10 @@
               <div class="weather temp current" id="currentTemp"></div>
               <i class="wi" id="currentTempIcon"></i>
               <div class="weather forecastWindow unfocused not-clicked hide" id="forecastContainer">
-                  
+                <div id="forecastTemps">
+
+                </div>
+                <div id="forecastAlerts" class="body-text"></div>
               </div>
             </div>
         </div>  
