@@ -748,12 +748,12 @@
         border-radius:15px 15px 0px 0px;
         line-height:.7;
         background-color: #ececec;
-        border: 1px solid #b8b8b8
-
+        border: 1px solid #b8b8b8;
       }
       .weather.container.current:has(.not-clicked.unfocused.hide){
-        background-color: unset !important;
-        border:unset !important;
+        background-color: unset;
+        border-color: #fff0;
+        border-radius:15px;
       }
       .weather.container.current:has(.not-clicked.unfocused.hide)::after{
         display:none;
@@ -779,7 +779,16 @@
         display:inline;
         font-size:20px;
       }
-      .weather.alert{
+      .weather.alert.statement{
+        box-shadow: 0 0 5px 3px #0ff !important;
+      }
+      .weather.alert.watch{
+        box-shadow: 0 0 5px 3px #f7ef02 !important;
+      }
+      .weather.alert.advisory{
+        box-shadow: 0 0 5px 3px #c47500 !important;
+      }
+      .weather.alert.warning{
         box-shadow: 0 0 5px 3px #d00000 !important;
       }
        #forecastTemps::has(.weather.alert){
@@ -882,7 +891,7 @@
         font-family:inherit;
         margin-bottom:5px;
         text-align:left;
-        color:#d00000;
+        color:#4d4d4d;
       }
       .long-alert{
         padding:5px;
@@ -894,8 +903,28 @@
         margin:0px;
         padding-left:12px;
         line-height:1;
-
+      } 
+      .long-alert.statement, .weather.container.current.statement{
+        border-color: #0ff !important;
+        background-color:#eff !important;
       }
+      .long-alert.watch, .weather.container.current.watch{
+        border-color: #f7ef02 !important;
+        background-color: #fffee8 !important;
+      }
+      .long-alert.advisory, .weather.container.current.advisory{
+        border-color: #f90 !important;
+        background-color:#fbf3e7 !important;
+      }
+      .long-alert.warning, .weather.container.current.warning{
+        border-color: #d00000 !important;
+        background-color:#eacdcd !important;
+      }
+     
+
+     
+
+
       @media (min-width:600px){
         .weather.forecastWindow {
           left: -235px;
@@ -934,7 +963,7 @@
     <div class="top-bar flex-container">
         <div class="datepicker-container" style="position: relative;">
             <input type="text" id="datepicker" class="datepicker">
-            <img src="https://5il.co/136s9" style="height: 20px;margin-left: -30px;margin-top: auto;margin-bottom: auto;">
+            <img id="datePickerImage" src="https://5il.co/136s9" style="height: 20px;margin-left: -30px;margin-top: auto;margin-bottom: auto;">
             <img src="https://5il.co/1dwzf" onclick="refreshBulletin()" class="refresh" style="height: 30px;margin-top: auto;margin-bottom: auto;margin-left: 13px; padding: 2px;">
             <img src="https://5il.co/1e00j" onclick="print()" class="refresh" style="height: 30px;margin-top: auto;margin-bottom: auto; padding: 5px;">
             
@@ -1237,6 +1266,10 @@
 
 
 <script>
+      $("#datePickerImage").on("click", function(e){
+        $('#datepicker').trigger("keydown").trigger("focus") 
+    })
+    
     const NUM_DAYS_TO_SHOW_CAL = 120;
     // window.onresize = function(){ console.log(window.innerWidth)}
 

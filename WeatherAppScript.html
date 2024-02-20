@@ -328,14 +328,33 @@ xmlhttpWeatherAlert.onreadystatechange = function () {
       console.log(endDayIndex);
       if(endDayIndex < 0 || endDayIndex < startDayIndex){continue;};
 
+      let level = "";
+      if(alerts[i].properties.event.indexOf("Warning") != -1){
+        level = "warning";
+      }
+      else if(alerts[i].properties.event.indexOf("Advisory") != -1){
+        level = "advisory";
+      }
+      else if(alerts[i].properties.event.indexOf("Watch") != -1){
+        level = "watch";
+      }
+      else if(alerts[i].properties.event.indexOf("Statement") != -1){
+        level = "statement";
+      }
+
+      if(startDayIndex == 0){currentWeather.classList.add(level)}
+
       for(let elementIndex = startDayIndex; elementIndex <= endDayIndex; elementIndex++){
         forecastElements[elementIndex].main.classList.add("alert");
+        forecastElements[elementIndex].main.classList.add(level);
       }
 
       let alertDiv = document.createElement("div");
       let title = document.createElement("h1");
       let info = document.createElement("p");
       alertDiv.classList.add("long-alert");
+      alertDiv.classList.add(level);
+
       
       title.innerHTML = alerts[i].properties.event;
 
