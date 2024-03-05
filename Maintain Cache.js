@@ -189,10 +189,10 @@ function cacheWeek() {
   }
   else{
     if(values[0][6] != ""){
-      rowData.status += " <br><br>"+values[0][6];
+      rowData.status += " <br><br>"+values[i][6];
     }
     if(values[0][5] != ""){
-      rowData.status += " <br><br>"+values[0][5];
+      rowData.status += " <br><br>"+values[i][5];
     }
   }
 
