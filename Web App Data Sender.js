@@ -172,6 +172,9 @@ function getRowFromSheet_(dateStr, sheetName){
         if(rowData.staffOut == ""){
           rowData.staffOut = "No Staff Out Today";
         }
+        else{
+          rowData.staffOut = formatStaffOut(rowData.staffOut)
+        }
 
         if(rowData.birthday == ""){
           rowData.birthday = "No Birthdays Today";
@@ -242,9 +245,44 @@ function getRowFromSheet_(dateStr, sheetName){
   return {date:dateStr, staffOut:"No Bulletin Found, Try Another Date", birthday:"No Bulletin Found, Try Another Date", announcement:"No Bulletin Found, Try Another Date", status:""}   
 }
 
-//  function test345t(){
+function formatStaffOut(staffValue){
+  let helperFunc = (section) =>{
+    let seperator = section.indexOf("-");
+      if(seperator == -1){
+        seperator = section.indexOf("(");
+      }
 
-//    var dateStr = "9/6/2022"
-    
-//    console.log(getBulletinData_(dateStr));
-//  }
+      if(seperator == -1){
+        seperator = section.length;
+      }
+
+      return "<b>" + section.slice(0, seperator) + "</b>" +section.slice(seperator);
+  }
+  let formattedValue = "";
+  
+  let sectionBr = staffValue.indexOf("\n\n");
+
+  while (sectionBr != -1){
+      let section = staffValue.slice(0, sectionBr+2); //+2 to include the new line characters at the end of the section
+      staffValue = staffValue.slice(sectionBr+2);
+
+      formattedValue += helperFunc(section);
+
+      sectionBr = staffValue.indexOf("\n\n");
+  }
+
+  formattedValue += helperFunc(staffValue)
+
+  return formattedValue
+}
+
+
+
+
+
+
+
+
+
+
+

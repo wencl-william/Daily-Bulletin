@@ -21,6 +21,8 @@ function help_archiving_bulletins_(upcoming_sheet, archive_sheet, today){
     archive_sheet.getRange("A3:G3").setValues(range.getValues()); //copy values from the bulletin data sheet to the archive sheet
     //archive_sheet.appendRow(range.getValues()[0]);
     range.deleteCells(SpreadsheetApp.Dimension.ROWS); //remove top data row from the goole sheet
+    Birthdays.addToArchivedDays(date);
+
     help_archiving_bulletins_(upcoming_sheet, archive_sheet, today); //recursive call to check the next row as well
     Utilities.sleep(500);
   }

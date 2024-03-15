@@ -114,10 +114,10 @@ function formatDateString(datestr){
 function onApprovalFormTriggerSubmit(event){
   try{onApprovalFormSubmit_(event)}catch(e){
     try{
-      MailApp.sendEmail("wencl.william@isd391.org", "Daily Bulletin Event Approval Error", JSON.stringify(event, null, 4)+" \n\n "+JSON.stringify(e,null,4)) 
+      MailApp.sendEmail("satrom.tavish@isd391.org,wencl.william@isd391.org", "Daily Bulletin Event Approval Error", JSON.stringify(event, null, 4)+" \n\n "+JSON.stringify(e,null,4)) 
       MailApp.sendEmail({to:Emails, subject: "Error - Daily Bulletin Form: Add Event", htmlBody: "There was an error processing the approval form. Please ensure that the event was posted as expected. If not try to approve it again in a few minutes. If the error persists, please manually add the event and contact the Tech office. <br><br>Approval form: https://forms.gle/yrdZTqJ5j73keusX8"});
     }catch(e){
-      MailApp.sendEmail("wencl.william@isd391.org", "Daily Bulletin Event Approval Error",event+" \n\n "+e)
+      MailApp.sendEmail("satrom.tavish@isd391.org,wencl.william@isd391.org", "Daily Bulletin Event Approval Error",event+" \n\n "+e)
       MailApp.sendEmail({to:Emails, subject: "Error - Daily Bulletin Form: Add Event", htmlBody: "There was an error processing the approval form. Please ensure that the event was posted as expected. If not try to approve it again in a few minutes. If the error persists, please manually add the event and contact the Tech office. <br><br>Approval form: https://forms.gle/yrdZTqJ5j73keusX8"});
     }
     throw e

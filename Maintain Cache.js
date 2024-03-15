@@ -19,6 +19,9 @@ function cacheWeek() {
   if(rowData.staffOut == ""){
     rowData.staffOut = "No Staff Out Today";
   }
+  else{
+    rowData.staffOut = formatStaffOut(rowData.staffOut)
+  }
 
   if(rowData.birthday == ""){
     rowData.birthday = "No Birthdays Today";
@@ -124,6 +127,9 @@ function cacheWeek() {
     var rowData = {date:values[i][0], staffOut:values[i][1], birthday:values[i][2], announcement:values[i][3], status:values[i][4], fixed:false, maintenance:false}
     if(rowData.staffOut == ""){
       rowData.staffOut = "No Staff Out Today";
+    }
+    else{
+      rowData.staffOut = formatStaffOut(rowData.staffOut)
     }
 
     if(rowData.birthday == ""){
